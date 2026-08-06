@@ -1,0 +1,804 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Right Now</title>
+<meta name="description" content="Your day, one block at a time.">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-180.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Right Now">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#faf6ed" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141109" media="(prefers-color-scheme: dark)">
+<style>
+  :root{
+    --bg:#faf6ed; --card:#fffdf7; --card2:#f2ecdd; --line:#e3dac5;
+    --ink:#282217; --muted:#7d7460; --accent:#e19b28; --accent-text:#8a5c06;
+    --accent-contrast:#241703; --good:#5d8a4e; --good-text:#3f6633;
+    --good-soft:rgba(93,138,78,.13); --accent-soft:rgba(225,155,40,.12);
+    --sans:"Segoe UI Variable Text","Segoe UI",-apple-system,BlinkMacSystemFont,"SF Pro Text",system-ui,sans-serif;
+    --mono:ui-monospace,"Cascadia Mono","SF Mono",Consolas,Menlo,monospace;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#141109; --card:#1d1911; --card2:#262013; --line:#3a3220;
+      --ink:#f0e8d5; --muted:#a3977b; --accent:#eaa63e; --accent-text:#f0ba60;
+      --accent-contrast:#241703; --good:#93c47f; --good-text:#aed69a;
+      --good-soft:rgba(147,196,127,.12); --accent-soft:rgba(234,166,62,.10);
+    }
+  }
+  :root[data-theme="light"]{
+    --bg:#faf6ed; --card:#fffdf7; --card2:#f2ecdd; --line:#e3dac5;
+    --ink:#282217; --muted:#7d7460; --accent:#e19b28; --accent-text:#8a5c06;
+    --accent-contrast:#241703; --good:#5d8a4e; --good-text:#3f6633;
+    --good-soft:rgba(93,138,78,.13); --accent-soft:rgba(225,155,40,.12);
+  }
+  :root[data-theme="dark"]{
+    --bg:#141109; --card:#1d1911; --card2:#262013; --line:#3a3220;
+    --ink:#f0e8d5; --muted:#a3977b; --accent:#eaa63e; --accent-text:#f0ba60;
+    --accent-contrast:#241703; --good:#93c47f; --good-text:#aed69a;
+    --good-soft:rgba(147,196,127,.12); --accent-soft:rgba(234,166,62,.10);
+  }
+
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--ink); font-family:var(--sans);
+    -webkit-font-smoothing:antialiased; line-height:1.45;
+  }
+  .wrap{max-width:30rem; margin:0 auto;
+    padding:calc(18px + env(safe-area-inset-top)) 16px calc(56px + env(safe-area-inset-bottom))}
+
+  /* ---------- header ---------- */
+  .topline{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .wordmark{font:700 11px/1 var(--mono); letter-spacing:.22em; color:var(--accent-text); text-transform:uppercase}
+  .modebtn{
+    font:600 12px var(--mono); color:var(--muted); background:none;
+    border:1px solid var(--line); border-radius:999px; padding:7px 12px; cursor:pointer;
+  }
+  .modebtn:hover{color:var(--ink); border-color:var(--muted)}
+  h1.date{font-size:26px; font-weight:800; letter-spacing:-.02em; margin:14px 0 10px; text-wrap:balance}
+  .weekrow{display:flex; align-items:center; gap:14px; margin-bottom:20px}
+  .dots{display:flex; gap:7px; align-items:center}
+  .dot{width:11px; height:11px; border-radius:50%; border:1.5px solid var(--line); background:transparent}
+  .dot.won{background:var(--good); border-color:var(--good)}
+  .dot.today{box-shadow:0 0 0 2px var(--bg), 0 0 0 3.5px var(--accent)}
+  .dot.fut{opacity:.45}
+  .weeklabel{font:500 12px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
+  .storagewarn{
+    font:500 12px var(--mono); color:var(--accent-text); background:var(--accent-soft);
+    border:1px solid var(--line); border-radius:8px; padding:8px 10px; margin-bottom:14px;
+  }
+
+  /* ---------- tabs ---------- */
+  .tabs{display:flex; gap:4px; background:var(--card2); border:1px solid var(--line);
+    padding:4px; border-radius:999px; margin-bottom:18px}
+  .tabs button{
+    flex:1; font:600 13.5px var(--sans); color:var(--muted); background:none; border:0;
+    border-radius:999px; padding:9px 0; cursor:pointer;
+  }
+  .tabs button[aria-current="true"]{background:var(--card); color:var(--ink);
+    box-shadow:0 1px 2px rgba(0,0,0,.08)}
+
+  /* ---------- now card ---------- */
+  .won-banner{
+    display:flex; align-items:center; gap:10px;
+    background:var(--good-soft); border:1px solid var(--good);
+    color:var(--good-text); border-radius:12px; padding:12px 14px;
+    font-weight:600; font-size:14.5px; margin-bottom:14px;
+  }
+  .won-banner svg{flex:none}
+  .now{
+    background:linear-gradient(150deg, var(--card), var(--card2));
+    border:1px solid var(--line); border-radius:16px; padding:20px 18px 8px;
+  }
+  .chip{
+    display:inline-block; font:700 12.5px var(--mono); letter-spacing:.04em;
+    background:var(--accent); color:var(--accent-contrast);
+    padding:6px 11px; border-radius:999px; font-variant-numeric:tabular-nums;
+  }
+  .chip.quiet{background:var(--card2); color:var(--muted); border:1px solid var(--line)}
+  .now h2{font-size:31px; font-weight:800; letter-spacing:-.025em; line-height:1.1;
+    margin:14px 0 6px; text-wrap:balance}
+  .why{color:var(--muted); font-size:14.5px; margin:0 0 12px; max-width:38ch}
+  .tasks{margin:0 -6px}
+
+  /* ---------- task rows ---------- */
+  .task{
+    display:flex; align-items:center; gap:13px; width:100%; text-align:left;
+    background:none; border:0; border-top:1px solid var(--line);
+    padding:13px 6px; min-height:50px; cursor:pointer;
+    font:500 15.5px/1.35 var(--sans); color:var(--ink);
+  }
+  .task .box{
+    width:25px; height:25px; flex:none; border-radius:8px;
+    border:2px solid var(--muted); color:var(--bg);
+    display:grid; place-items:center;
+    transition:background .15s, border-color .15s;
+  }
+  .task:hover .box{border-color:var(--accent)}
+  .task.done .box{background:var(--good); border-color:var(--good)}
+  .task.done .box svg{animation:pop .2s ease-out}
+  .task .lbl{transition:opacity .15s}
+  .task.done .lbl{opacity:.5; text-decoration:line-through;
+    text-decoration-thickness:1px; text-decoration-color:var(--muted)}
+  .fchip{
+    margin-left:auto; flex:none; font:700 9.5px var(--mono); letter-spacing:.14em;
+    text-transform:uppercase; color:var(--accent-text);
+    border:1px solid var(--accent-text); border-radius:999px; padding:3px 7px; opacity:.85;
+  }
+  .thint{margin-left:auto; flex:none; font:500 12px var(--mono); color:var(--muted)}
+  @keyframes pop{from{transform:scale(.5)}to{transform:scale(1)}}
+
+  .upnext{font:500 13px var(--mono); color:var(--muted); margin:12px 2px 22px}
+  .upnext b{color:var(--accent-text); font-weight:600}
+
+  .catch{display:flex; align-items:center; flex-wrap:wrap; gap:8px; margin:14px 2px 0}
+  .catch-l{font:600 12px var(--mono); color:var(--muted); letter-spacing:.03em}
+  .pill{
+    font:600 13px var(--sans); color:var(--accent-text); background:var(--accent-soft);
+    border:1px solid var(--accent-text); border-radius:999px; padding:7px 13px; cursor:pointer;
+  }
+
+  /* ---------- timeline ---------- */
+  .tl-wrap{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden}
+  .tl+.tl{border-top:1px solid var(--line)}
+  .tl-h{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    background:none; border:0; padding:13px 14px; min-height:50px; cursor:pointer;
+    font:500 15px var(--sans); color:var(--ink);
+  }
+  .tl.cur .tl-h{background:var(--accent-soft)}
+  .tl-time{font:600 12.5px var(--mono); color:var(--muted); width:62px; flex:none;
+    font-variant-numeric:tabular-nums}
+  .tl.cur .tl-time{color:var(--accent-text)}
+  .tl-title{flex:1}
+  .tl.cur .tl-title{font-weight:700}
+  .tl-count{font:500 12px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
+  .tl-count.full{color:var(--good-text); font-weight:700}
+  .chev{flex:none; color:var(--muted); transition:transform .15s}
+  .chev.open{transform:rotate(180deg)}
+  .tl-tasks{padding:0 14px 6px 14px; background:color-mix(in srgb, var(--card2) 45%, transparent)}
+  .sectionlabel{font:700 11px var(--mono); letter-spacing:.18em; text-transform:uppercase;
+    color:var(--muted); margin:0 2px 10px}
+
+  /* ---------- goals ---------- */
+  .wkline{font:500 12.5px var(--mono); color:var(--muted); margin:0 2px 14px}
+  .gcard{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px 16px 6px; margin-bottom:14px}
+  .eyebrow{font:700 11px var(--mono); letter-spacing:.2em; color:var(--accent-text);
+    text-transform:uppercase; margin-bottom:8px}
+  .vision{font-size:16.5px; font-weight:700; letter-spacing:-.01em; margin:0 0 6px;
+    text-wrap:balance}
+  .phase{color:var(--muted); font-size:13.5px; margin:0 0 10px}
+  .gnote{font-size:13px; color:var(--muted); margin:6px 2px 0}
+
+  /* ---------- plan ---------- */
+  .pcard{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:18px 16px; margin-bottom:14px}
+  .pcard h3{font-size:17px; font-weight:800; letter-spacing:-.01em; margin:0 0 10px}
+  .pcard p{font-size:14px; color:var(--muted); margin:8px 0 0}
+  .pcard p b{color:var(--ink)}
+  .pcard ol, .pcard ul{margin:0; padding-left:20px; font-size:14.5px}
+  .pcard li{margin:7px 0}
+  .pcard li b{font-weight:700}
+  .floorlist{list-style:none; padding:0}
+  .floorlist li{display:flex; gap:10px; align-items:baseline; margin:9px 0; font-size:15px}
+  .floorlist .n{font:700 12px var(--mono); color:var(--accent-text); flex:none}
+  .tablewrap{overflow-x:auto; margin:4px -4px 0}
+  table.sched{border-collapse:collapse; width:100%; font-size:13.5px}
+  table.sched td{padding:7px 10px 7px 4px; border-top:1px solid var(--line); vertical-align:top}
+  table.sched td.t{font:600 12px var(--mono); color:var(--muted); white-space:nowrap;
+    font-variant-numeric:tabular-nums}
+  table.sched td.n{color:var(--muted); font-size:12.5px}
+  .wo{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:10px}
+  .wo>div{background:var(--card2); border:1px solid var(--line); border-radius:10px; padding:12px}
+  .wo h4{font:700 11px var(--mono); letter-spacing:.16em; color:var(--accent-text);
+    margin:0 0 8px; text-transform:uppercase}
+  .wo ul{list-style:none; padding:0; margin:0; font-size:13.5px}
+  .wo li{margin:6px 0}
+  @media (max-width:420px){.wo{grid-template-columns:1fr}}
+
+  footer{margin-top:26px; text-align:center;
+    font:500 11.5px var(--mono); color:var(--muted); letter-spacing:.03em}
+
+  button:focus-visible, .task:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:8px}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important; transition:none !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* Fall 2026: UTD classes begin Mon Aug 24 — the app switches schedules automatically. */
+  var SEMESTER_START = new Date(2026,7,24);
+
+  /* Preview hook: append ?t=2026-08-25T10:30 to see any moment's schedule. */
+  var TP=null;
+  try{ TP=new URLSearchParams(location.search).get('t'); }catch(e){}
+  var nowDate=function(){ return TP ? new Date(TP) : new Date(); };
+
+  /* ---------- storage (with in-memory fallback) ---------- */
+  var store = (function(){
+    try{
+      localStorage.setItem('rn1:t','1'); localStorage.removeItem('rn1:t');
+      return {get:function(k){return localStorage.getItem(k)},
+              set:function(k,v){localStorage.setItem(k,v)}, live:true};
+    }catch(e){
+      var m={};
+      return {get:function(k){return (k in m)?m[k]:null},
+              set:function(k,v){m[k]=v}, live:false};
+    }
+  })();
+
+  /* ---------- helpers ---------- */
+  var pad=function(n){return String(n).padStart(2,'0')};
+  var dkey=function(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+  var mins=function(t){var p=t.split(':');return (+p[0])*60+(+p[1])};
+  var fmt=function(t){
+    var p=t.split(':'), h=+p[0], m=+p[1], am=h<12;
+    h=h%12; if(h===0)h=12;
+    return h+':'+pad(m)+(am?'am':'pm');
+  };
+  var monday=function(d){
+    var x=new Date(d.getFullYear(),d.getMonth(),d.getDate());
+    x.setDate(x.getDate()-((x.getDay()+6)%7));
+    return x;
+  };
+  var weekKeys=function(mon){
+    var out=[],i,y;
+    for(i=0;i<7;i++){y=new Date(mon); y.setDate(mon.getDate()+i); out.push(dkey(y));}
+    return out;
+  };
+
+  var MIN_IDS=['m-up','m-teeth','m-walk','m-rep','m-bed'];
+
+  var dayState=function(k){
+    var s;
+    try{ s=JSON.parse(store.get('rn1:d:'+k)); }catch(e){ s=null; }
+    if(!s||typeof s!=='object') s={};
+    if(!s.checks) s.checks={};
+    return s;
+  };
+  var saveDay=function(k,s){ store.set('rn1:d:'+k, JSON.stringify(s)); };
+  var weekState=function(k){
+    var s;
+    try{ s=JSON.parse(store.get('rn1:w:'+k)); }catch(e){ s=null; }
+    if(!s||typeof s!=='object') s={};
+    if(!s.checks) s.checks={};
+    return s;
+  };
+  var saveWeek=function(k,s){ store.set('rn1:w:'+k, JSON.stringify(s)); };
+  var isWon=function(k){
+    var s=dayState(k);
+    return MIN_IDS.every(function(id){return !!s.checks[id]});
+  };
+
+  /* ---------- block builders ---------- */
+  var B=function(id,s,e,title,why,tasks){return {id:id,s:s,e:e,title:title,why:why,tasks:tasks}};
+  var SEASON_WHY='New-grad 2027 postings are open right now. Early applications count double.';
+
+  var wakeB=function(s,e,hint){return B('wake',s,e,'Wake up',
+    "Don't negotiate with the bed. Feet on the floor first — everything is easier after.",
+    [{id:'m-up',label:'Out of bed + drink the water by your bed',min:true,short:'Water',hint:hint},
+     {id:'wake.1',label:'Open the blinds — real light in your eyes'},
+     {id:'wake.2',label:"Stay off the phone until you're vertical"}]);};
+  var humanB=function(s,e){return B('human',s,e,'Get human',
+    "You act like the person you're dressed as.",
+    [{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},
+     {id:'human.1',label:'Shower'},
+     {id:'human.2',label:'Real clothes + make the bed'}]);};
+  var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
+    'Half of getting ripped happens at meals.',
+    quick?[{id:'breakfast.0',label:'Protein even in a hurry — a shake and a banana counts'}]
+         :[{id:'breakfast.0',label:'Something with protein — eggs, Greek yogurt, a shake'},
+           {id:'breakfast.1',label:'Coffee with food, not instead of it'}]);};
+  var careerB=function(s,e,why){return B('career',s,e,'Career block',why,
+    [{id:'m-rep',label:'One job rep: submit 1 application or solve 1 problem',min:true,short:'Job rep',hint:'anytime'},
+     {id:'career.1',label:'2 more applications (Simplify new-grad list)'},
+     {id:'career.2',label:'1 LeetCode from NeetCode 150 (easies first)'}]);};
+  var walkB=function(s,e,hint){return B('walk',s,e,'Walk',
+    "Sun and steps fix more brain chemistry than you'd expect.",
+    [{id:'m-walk',label:'10–20 minutes outside — no destination needed',min:true,short:'Walk',hint:hint}]);};
+  var lunchB=function(s,e){return B('lunch',s,e,'Lunch','',
+    [{id:'lunch.0',label:'Real food, protein again'},
+     {id:'lunch.1',label:'Eat away from the screen'}]);};
+  var studyB=function(s,e){return B('study',s,e,'Study block',
+    "Grades are a byproduct of starting before it's urgent.",
+    [{id:'study.0',label:'90 minutes on assignments — hardest class first'},
+     {id:'study.1',label:'Log one line: what did today add?'}]);};
+  var liftB=function(s,e){return B('workout',s,e,'Lift day',
+    'Ripped is about 150 ordinary workouts away. This is one of them.',
+    [{id:'workout.0',label:'Workout A or B — see the Plan tab (~45 min)'},
+     {id:'workout.1',label:'Log your weights (notes app is fine)'}]);};
+  var moveB=function(s,e){return B('workout',s,e,'Move day',
+    'Easy days are where the hard days pay out.',
+    [{id:'workout.0',label:'30+ minutes: long walk, bike, hoop, swim — anything'}]);};
+  var dinnerB=function(s,e){return B('dinner',s,e,'Dinner',
+    'Cooking is a money skill, a health skill, and honestly a date skill.',
+    [{id:'dinner.0',label:'Cook it yourself: protein + carb + something green'}]);};
+  var freeB=function(s,e,why){return B('free',s,e,'Free',why,
+    [{id:'free.0',label:'Whatever you want — zero guilt'}]);};
+  var eveningB=function(s,e){return B('evening',s,e,'Evening — yours',
+    "Be where your feet are. The job hunt is on tomorrow's schedule, not tonight's.",
+    [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]);};
+  var shutdownB=function(s,e,bedLabel,why){return B('shutdown',s,e,'Shutdown',
+    why||'Tomorrow is decided right now, not in the morning.',
+    [{id:'shutdown.0',label:'Refill the water glass, set it by the bed'},
+     {id:'shutdown.1',label:'Phone on the charger, out of arm\'s reach'},
+     {id:'shutdown.2',label:'Stage tomorrow: bag packed, clothes out, 30-second look at this app'},
+     {id:'m-bed',label:bedLabel,min:true,short:'Lights out',hint:'tonight'}]);};
+  var reviewB=function(s,e){return B('review',s,e,'Weekly review',
+    'Twenty minutes of steering saves a week of drifting.',
+    [{id:'review.0',label:'Open Claude Code in C:\\Life and say "weekly review"'},
+     {id:'review.1',label:'Adjust the plan together, refresh the week goals'}]);};
+  var classB=function(id,s,e,title,room,note){return B(id,s,e,title,
+    room+(note?' — '+note:''),
+    [{id:id+'.0',label:'In the seat by '+fmt(s)},
+     {id:id+'.1',label:'Phone stays in the bag'}]);};
+
+  /* ---------- summer (through Aug 23) ---------- */
+  var summerBlocks=function(dow){
+    var workout = (dow===0) ? B('workout','16:30','17:45','Rest day',
+        'Rest is the program. The muscle you worked this week gets built today.',
+        [{id:'workout.0',label:'Optional: stretch 10 minutes'}])
+      : (dow===1||dow===3||dow===5) ? liftB('16:30','17:45')
+      : moveB('16:30','17:45');
+    var build = (dow===0) ? reviewB('13:30','15:00')
+      : B('build','13:30','15:00','Build block',
+        'A project you can demo beats a fourth resume bullet.',
+        [{id:'build.0',label:'90 focused minutes: project, more applications, or interview prep'},
+         {id:'build.1',label:'Log one line: what did today add?'}]);
+    return [
+      wakeB('09:00','09:20','by 9:30am'),
+      humanB('09:20','10:00'),
+      breakfastB('10:00','10:45',false),
+      careerB('10:45','12:15',SEASON_WHY),
+      lunchB('12:15','13:00'),
+      walkB('13:00','13:30','anytime'),
+      build,
+      freeB('15:00','16:30','The work happened this morning. This is yours.'),
+      workout,
+      dinnerB('17:45','19:00'),
+      eveningB('19:00','22:30'),
+      shutdownB('22:30','23:00','In bed, lights out by 11:30')
+    ];
+  };
+
+  /* ---------- semester (from Aug 24) ---------- */
+  var semesterBlocks=function(dow){
+    var tthHead=function(){
+      return [
+        wakeB('07:00','07:15','first thing'),
+        humanB('07:15','07:45'),
+        breakfastB('07:45','08:10',true),
+        B('transit','08:10','08:30','Get to JSOM',
+          'Out the door by 8:10 puts you in the seat with time to spare.',
+          [{id:'transit.0',label:'Bag was packed last night — grab and go'}]),
+        classB('cs4390','08:30','09:45','CS 4390 · Networks','JSOM 1.110','the 8:30 is brutal; go anyway'),
+        careerB('09:45','11:30','Dead gap between classes = the career block. Library or an ECSS lounge.'),
+        classB('cs4349','11:30','12:45','CS 4349 · Algorithms','ECSS 2.415','this class IS interview prep'),
+        lunchB('12:45','13:45'),
+        studyB('13:45','15:15'),
+        walkB('15:15','15:45','campus counts')
+      ];
+    };
+    if(dow===1||dow===3){ /* Mon, Wed */
+      return [
+        wakeB('08:00','08:20','first thing'),
+        humanB('08:20','08:50'),
+        breakfastB('08:50','09:30',false),
+        B('transit','09:30','10:00','Head to campus',
+          'Leaving on time is the whole trick.',
+          [{id:'transit.0',label:'Bag: laptop, charger, water bottle'},
+           {id:'transit.1',label:'Walking by 9:40 — ECSS 2.415 by 9:55'}]),
+        classB('cs4391','10:00','11:15','CS 4391 · Computer Vision','ECSS 2.415','attendance is most of the grade in disguise'),
+        lunchB('11:15','12:00'),
+        careerB('12:00','13:30',SEASON_WHY),
+        studyB('13:30','15:00'),
+        walkB('15:00','15:30','anytime'),
+        freeB('15:30','16:30','Earned.'),
+        liftB('16:30','17:45'),
+        dinnerB('17:45','19:00'),
+        eveningB('19:00','22:00'),
+        shutdownB('22:00','22:30','In bed, lights out by 11:00 — tomorrow starts at 7:00',
+          'Early day tomorrow. Win it tonight.')
+      ];
+    }
+    if(dow===2){ /* Tue — the gauntlet */
+      return tthHead().concat([
+        freeB('15:45','16:45','Breather before the evening run.'),
+        B('dinner','16:45','17:30','Early dinner',
+          'Long night ahead — eat now, not at 10pm.',
+          [{id:'dinner.0',label:'Real meal, protein — 9:30pm-you says thanks'}]),
+        classB('cs4348','17:30','18:45','CS 4348 · Operating Systems','ECSW 1.365',null),
+        B('musi','18:45','21:45','MUSI 3120 · Ensemble',
+          'PHY 1.304 — the fun one. Music is not a wasted Tuesday.',
+          [{id:'musi.0',label:'Be there by 7:00'}]),
+        shutdownB('21:45','22:30','In bed, lights out by 11:00',
+          'Tuesday is the gauntlet — and you just survived it. Straight to bed.')
+      ]);
+    }
+    if(dow===4){ /* Thu */
+      return tthHead().concat([
+        freeB('15:45','17:30','Or get ahead on assignments — Friday-you will notice.'),
+        classB('cs4348','17:30','18:45','CS 4348 · Operating Systems','ECSW 1.365',null),
+        dinnerB('18:45','19:45'),
+        B('evening','19:45','22:00','Evening — yours','Thursday night is earned.',
+          [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]),
+        shutdownB('22:00','22:30','In bed, lights out by 11:30')
+      ]);
+    }
+    if(dow===5){ /* Fri — no classes */
+      return [
+        wakeB('08:00','08:20','first thing'),
+        humanB('08:20','08:50'),
+        breakfastB('08:50','09:30',false),
+        careerB('09:30','11:00',SEASON_WHY),
+        B('build','11:00','12:30','Build block',
+          "Clear the week's leftovers, then the weekend is truly free.",
+          [{id:'build.0',label:'Assignments first, then project or interview prep'},
+           {id:'build.1',label:'Log one line: what did this week add?'}]),
+        lunchB('12:30','13:15'),
+        walkB('13:15','13:45','anytime'),
+        freeB('13:45','16:30','Week\'s work is done.'),
+        liftB('16:30','17:45'),
+        B('dinner','17:45','19:00','Dinner — or date-night prep','',
+          [{id:'dinner.0',label:'Cook together if she\'s over — that counts double'}]),
+        B('evening','19:00','23:00','Date night',
+          'Friday is the standing date slot — planned by you.',
+          [{id:'evening.0',label:'All-in: plan made, phone down'}]),
+        shutdownB('23:00','23:30','In bed by 12:30 — weekend rules')
+      ];
+    }
+    if(dow===6){ /* Sat */
+      return [
+        wakeB('09:00','09:20','by 9:30am'),
+        humanB('09:20','10:00'),
+        breakfastB('10:00','10:45',false),
+        walkB('10:45','11:15','anytime'),
+        B('career','11:15','12:00','One job rep',
+          'Keeps the pipeline warm without eating the weekend.',
+          [{id:'m-rep',label:'1 application or 1 problem — then close the laptop',min:true,short:'Job rep',hint:'before noon'}]),
+        B('free','12:00','23:00','Free day','This is the point of the whole system.',
+          [{id:'free.0',label:'Move 30+ min somewhere in here — hoop, bike, long walk'},
+           {id:'free.1',label:'Friends, girlfriend, fun'}]),
+        shutdownB('23:00','23:30','In bed by 12:30 — weekend rules')
+      ];
+    }
+    /* Sun */
+    return [
+      wakeB('09:00','09:20','by 9:30am'),
+      humanB('09:20','10:00'),
+      breakfastB('10:00','10:45',false),
+      B('slow','10:45','12:45','Slow morning','Nothing required.',
+        [{id:'slow.0',label:'Optional: prep some food for the week'}]),
+      B('career','12:45','13:30','One job rep',
+        'One rep before the review keeps the streak honest.',
+        [{id:'m-rep',label:'1 application or 1 problem',min:true,short:'Job rep',hint:'before review'}]),
+      reviewB('13:30','15:00'),
+      walkB('15:00','15:30','anytime'),
+      freeB('15:30','17:45','Rest day — the muscle gets built today.'),
+      dinnerB('17:45','19:00'),
+      B('evening','19:00','21:30','Evening — easy','School week starts tomorrow.',
+        [{id:'evening.0',label:'Wind down early tonight'}]),
+      shutdownB('21:30','22:00','In bed, lights out by 11:00 — Monday starts at 8:00')
+    ];
+  };
+
+  var dayBlocks=function(d){
+    return (d.getTime()>=SEMESTER_START.getTime())
+      ? semesterBlocks(d.getDay())
+      : summerBlocks(d.getDay());
+  };
+
+  /* ---------- goals ---------- */
+  var GOALS=[
+    {id:'body',tag:'Body',
+     vision:'Lean and strong — the guy who obviously lifts.',
+     phase:'Now (Aug–Oct): build the habit, learn the lifts, eat protein. Consistency now, abs later.',
+     week:['Lift 3× — A / B / A','Walk every day','Protein at every meal','One weigh-in: baseline, zero judgment']},
+    {id:'career',tag:'Career',
+     vision:'Signed SWE offer before May 2027 graduation.',
+     phase:'Now: application season just opened — early applications count double. Volume + daily practice.',
+     week:['Resume rebuilt — one page','10 applications (Simplify new-grad list)','5 LeetCode easies (NeetCode 150)','Handshake updated + find the fall ECS career-fair date']},
+    {id:'money',tag:'Money',
+     vision:'High savings rate from day one of the job — early retirement and three kids become math problems with known answers.',
+     phase:"Now: see clearly. You can't steer numbers you can't see.",
+     week:['30-minute money map with Claude (accounts, debts, monthly burn)','Notice every purchase this week — just notice']},
+    {id:'us',tag:'Us',
+     vision:'The kind of partner someone builds a life with.',
+     phase:'Now: show up steady.',
+     week:['One real date this week — planned by you','Tell her about this system. One ally beats zero.']}
+  ];
+
+  /* ---------- render ---------- */
+  var app=document.getElementById('app');
+  var tab='now';
+  var expanded={};
+
+  var CHECK='<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8"/></svg>';
+  var CHEV='<svg class="chev" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
+  var CHEVO='<svg class="chev open" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
+
+  var taskRow=function(t,checks,act){
+    var done=!!checks[t.id];
+    var tail=t.min?'<span class="fchip">floor</span>':'';
+    return '<button class="task'+(done?' done':'')+'" data-act="'+act+'" data-id="'+t.id+'" aria-pressed="'+done+'">'
+      +'<span class="box">'+(done?CHECK:'')+'</span>'
+      +'<span class="lbl">'+t.label+'</span>'+tail+'</button>';
+  };
+  var floorRow=function(t,checks,hint){
+    var done=!!checks[t.id];
+    return '<button class="task'+(done?' done':'')+'" data-act="task" data-id="'+t.id+'" aria-pressed="'+done+'">'
+      +'<span class="box">'+(done?CHECK:'')+'</span>'
+      +'<span class="lbl">'+t.label+'</span>'
+      +'<span class="thint">'+hint+'</span></button>';
+  };
+
+  var headerHTML=function(now,st){
+    var dk=dkey(now);
+    var keys=weekKeys(monday(now));
+    var ti=keys.indexOf(dk);
+    var wonCount=0, dots='', i, cls;
+    for(i=0;i<7;i++){
+      cls='dot';
+      if(i<=ti && isWon(keys[i])){cls+=' won'; wonCount++;}
+      if(i===ti)cls+=' today';
+      if(i>ti)cls+=' fut';
+      dots+='<span class="'+cls+'"></span>';
+    }
+    var modeLabel=(st.mode==='min')?'Back to full day':'Rough day? Floor mode';
+    return '<div class="topline">'
+      +'<span class="wordmark">Right now</span>'
+      +'<button class="modebtn" data-act="mode">'+modeLabel+'</button></div>'
+      +'<h1 class="date">'+now.toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric'})+'</h1>'
+      +'<div class="weekrow"><span class="dots">'+dots+'</span>'
+      +'<span class="weeklabel">'+wonCount+'/7 won &middot; target 5</span></div>'
+      +(store.live?'':'<div class="storagewarn">This browser is blocking saved check-marks — they\'ll reset on refresh.</div>')
+      +'<nav class="tabs">'
+      +'<button data-act="tab" data-tab="now" aria-current="'+(tab==='now')+'">Now</button>'
+      +'<button data-act="tab" data-tab="goals" aria-current="'+(tab==='goals')+'">Goals</button>'
+      +'<button data-act="tab" data-tab="plan" aria-current="'+(tab==='plan')+'">Plan</button>'
+      +'</nav>';
+  };
+
+  var nowHTML=function(now,st){
+    var blocks=dayBlocks(now);
+    var nm=now.getHours()*60+now.getMinutes();
+    var checks=st.checks;
+    var won=MIN_IDS.every(function(id){return !!checks[id]});
+    var html=won
+      ? '<div class="won-banner">'+CHECK+' Day won — five for five. Everything past this is extra credit.</div>'
+      : '';
+
+    /* floor mode: the whole day is five checks */
+    if(st.mode==='min'){
+      var rows='';
+      blocks.forEach(function(b){
+        b.tasks.forEach(function(t){ if(t.min) rows+=floorRow(t,checks,t.hint||fmt(b.s)); });
+      });
+      html+='<section class="now">'
+        +'<span class="chip quiet">floor mode</span>'
+        +'<h2>Five checks. That\'s the whole day.</h2>'
+        +'<p class="why">Rough days count too — the floor is how you win without burning out. Everything else is extra credit today.</p>'
+        +'<div class="tasks">'+rows+'</div></section>';
+      return html;
+    }
+
+    /* full mode: hero = the current block */
+    var first=blocks[0], last=blocks[blocks.length-1];
+    var cur=null, i;
+    for(i=0;i<blocks.length;i++){
+      if(nm>=mins(blocks[i].s)&&nm<mins(blocks[i].e)){cur=blocks[i];break;}
+    }
+    var chip,title,why,tasks,nextLabel;
+    if(cur){
+      chip=fmt(cur.s)+' &ndash; '+fmt(cur.e);
+      title=cur.title; why=cur.why; tasks=cur.tasks;
+      var nb=null;
+      for(i=0;i<blocks.length;i++){ if(mins(blocks[i].s)>nm){nb=blocks[i];break;} }
+      nextLabel=nb?(nb.title+' &middot; '+fmt(nb.s)):('Sleep &middot; '+fmt(cur.e));
+    }else if(nm>=300&&nm<mins(first.s)){
+      chip='early start'; title='Up early — bonus round';
+      why='Water, light, food. The '+fmt(first.s)+' list unlocks whenever you start it.';
+      tasks=first.tasks;
+      nextLabel=blocks[1].title+' &middot; '+fmt(blocks[1].s);
+    }else{
+      var wakeRef;
+      if(nm<300){ wakeRef=first; }
+      else{
+        var tm=new Date(now); tm.setDate(now.getDate()+1);
+        wakeRef=dayBlocks(tm)[0];
+      }
+      chip='sleep'; title='Lights out';
+      why='Nothing on the phone beats being sharp tomorrow.';
+      tasks=(nm>=300)?last.tasks.filter(function(t){return t.id==='m-bed'}):[];
+      nextLabel='Wake up &middot; '+fmt(wakeRef.s);
+    }
+
+    html+='<section class="now">'
+      +'<span class="chip">'+chip+'</span>'
+      +'<h2>'+title+'</h2>'
+      +(why?'<p class="why">'+why+'</p>':'')
+      +'<div class="tasks">'+tasks.map(function(t){return taskRow(t,checks,'task')}).join('')+'</div>'
+      +'</section>';
+
+    /* gentle catch-up for floor items from earlier blocks */
+    var missed=[];
+    blocks.forEach(function(b){
+      if(mins(b.e)<=nm) b.tasks.forEach(function(t){ if(t.min&&!checks[t.id]) missed.push(t); });
+    });
+    if(missed.length && !won){
+      html+='<div class="catch"><span class="catch-l">2-min catch-up:</span>'
+        +missed.map(function(t){return '<button class="pill" data-act="task" data-id="'+t.id+'">'+t.short+'</button>'}).join('')
+        +'</div>';
+    }
+    html+='<p class="upnext">Up next &middot; <b>'+nextLabel+'</b></p>';
+
+    /* today timeline */
+    html+='<p class="sectionlabel">Today</p><div class="tl-wrap">';
+    blocks.forEach(function(b){
+      var done=b.tasks.filter(function(t){return !!checks[t.id]}).length;
+      var total=b.tasks.length;
+      var isCur=cur&&cur.id===b.id;
+      var open=!!expanded[b.id];
+      html+='<div class="tl'+(isCur?' cur':'')+'">'
+        +'<button class="tl-h" data-act="expand" data-block="'+b.id+'" aria-expanded="'+open+'">'
+        +'<span class="tl-time">'+fmt(b.s)+'</span>'
+        +'<span class="tl-title">'+b.title+'</span>'
+        +'<span class="tl-count'+(done===total?' full':'')+'">'+done+'/'+total+'</span>'
+        +(open?CHEVO:CHEV)+'</button>'
+        +(open?'<div class="tl-tasks">'+b.tasks.map(function(t){return taskRow(t,checks,'task')}).join('')+'</div>':'')
+        +'</div>';
+    });
+    html+='</div>';
+    return html;
+  };
+
+  var goalsHTML=function(now){
+    var mon=monday(now);
+    var wk=dkey(mon);
+    var ws=weekState(wk);
+    var label=mon.toLocaleDateString(undefined,{month:'short',day:'numeric'});
+    var html='<p class="wkline">Week of '+label+' &middot; refreshed at each Sunday review</p>';
+    GOALS.forEach(function(g){
+      var rows=g.week.map(function(lbl,i){
+        return taskRow({id:g.id+'.'+i,label:lbl},ws.checks,'wktask');
+      }).join('');
+      html+='<section class="gcard">'
+        +'<div class="eyebrow">'+g.tag+'</div>'
+        +'<p class="vision">'+g.vision+'</p>'
+        +'<p class="phase">'+g.phase+'</p>'
+        +'<div class="tasks">'+rows+'</div></section>';
+    });
+    html+='<p class="gnote">These are the week\'s moves, not the whole mountain. Want one swapped? Tell Claude.</p>';
+    return html;
+  };
+
+  var planHTML=function(){
+    return ''
+    +'<section class="pcard"><h3>The floor</h3>'
+    +'<ul class="floorlist">'
+    +'<li><span class="n">01</span>Out of bed + drink the water by your bed</li>'
+    +'<li><span class="n">02</span>Brush teeth</li>'
+    +'<li><span class="n">03</span>10 minutes outside</li>'
+    +'<li><span class="n">04</span>One job rep — 1 application or 1 problem</li>'
+    +'<li><span class="n">05</span>Lights out on time</li>'
+    +'</ul>'
+    +'<p>Five checks = <b>a won day</b>, even if nothing else happens. Target: <b>5 of 7</b>. The slack is the design.</p></section>'
+
+    +'<section class="pcard"><h3>House rules</h3><ol>'
+    +'<li><b>The floor is sacred, the ceiling is optional.</b></li>'
+    +'<li><b>Never negotiate in bed.</b> The only wake-up decision is feet-on-floor.</li>'
+    +'<li><b>Missing a block creates no backlog.</b> This app only ever shows now.</li>'
+    +'<li><b>Two-day rule:</b> never miss the same floor item twice in a row.</li>'
+    +'<li><b>Evenings are guilt-free by design.</b> Rest is part of the program.</li>'
+    +'<li><b>Sunday steering:</b> 20 minutes of review beats a week of drifting.</li>'
+    +'</ol></section>'
+
+    +'<section class="pcard"><h3>Fall classes <span style="font:500 12px var(--mono);color:var(--muted)">from Aug 24</span></h3>'
+    +'<div class="tablewrap"><table class="sched">'
+    +'<tr><td class="t">MW 10:00</td><td>CS 4391 &middot; Computer Vision</td><td class="n">ECSS 2.415</td></tr>'
+    +'<tr><td class="t">TTh 8:30</td><td>CS 4390 &middot; Networks</td><td class="n">JSOM 1.110</td></tr>'
+    +'<tr><td class="t">TTh 11:30</td><td>CS 4349 &middot; Algorithms</td><td class="n">ECSS 2.415</td></tr>'
+    +'<tr><td class="t">TTh 5:30</td><td>CS 4348 &middot; Operating Systems</td><td class="n">ECSW 1.365</td></tr>'
+    +'<tr><td class="t">T 7:00</td><td>MUSI 3120 &middot; Ensemble</td><td class="n">PHY 1.304</td></tr>'
+    +'</table></div></section>'
+
+    +'<section class="pcard"><h3>The week, at a glance <span style="font:500 12px var(--mono);color:var(--muted)">semester</span></h3>'
+    +'<div class="tablewrap"><table class="sched">'
+    +'<tr><td class="t">Mon/Wed</td><td>8:00 up &middot; 10:00 class &middot; 12:00 career &middot; study &middot; 4:30 lift &middot; 11:00 out</td></tr>'
+    +'<tr><td class="t">Tue</td><td>7:00 up &middot; 8:30 class &middot; gap = career &middot; 11:30 class &middot; 5:30 class &middot; 7:00 ensemble &middot; 11:00 out. <b>The gauntlet — floor mode is honorable here.</b></td></tr>'
+    +'<tr><td class="t">Thu</td><td>Same start as Tue &middot; 5:30 class &middot; evening free &middot; 11:30 out</td></tr>'
+    +'<tr><td class="t">Fri</td><td>8:00 up &middot; career + build &middot; 4:30 lift &middot; <b>date night</b> &middot; 12:30 out</td></tr>'
+    +'<tr><td class="t">Sat</td><td>9:00 up &middot; one rep &middot; move + fun &middot; 12:30 out</td></tr>'
+    +'<tr><td class="t">Sun</td><td>9:00 up &middot; one rep &middot; 1:30 review &middot; rest &middot; 11:00 out</td></tr>'
+    +'</table></div>'
+    +'<p>Until Aug 23 the app runs the summer schedule (9:00 wake, career block 10:45, lift M/W/F 4:30). It switches over automatically.</p></section>'
+
+    +'<section class="pcard"><h3>Workouts</h3><div class="wo">'
+    +'<div><h4>Workout A</h4><ul>'
+    +'<li>Goblet squat 3&times;8</li><li>Bench press or push-ups 3&times;8</li>'
+    +'<li>One-arm DB row 3&times;10/side</li><li>Plank 3&times;30s</li></ul></div>'
+    +'<div><h4>Workout B</h4><ul>'
+    +'<li>Romanian deadlift 3&times;8</li><li>DB overhead press 3&times;8</li>'
+    +'<li>Lat pulldown or assisted pull-up 3&times;10</li><li>Farmer carry 3&times; down-and-back</li></ul></div>'
+    +'</div>'
+    +'<p>Alternate A/B/A, then B/A/B. Add 2.5&ndash;5 lb whenever all reps are clean. '
+    +'Lifts stay M/W/F in the semester — Tue/Thu are campus-miles days. '
+    +'UTD Activity Center is free with your Comet Card. Protein ~0.7&ndash;1g per lb, sleep 7&ndash;9h.</p></section>'
+
+    +'<section class="pcard"><h3>How this runs</h3>'
+    +'<p>The plan lives in <b>C:\\Life\\PLAN.md</b>. Claude is the manager and keeps the memory.</p>'
+    +'<p><b>Sundays, 1:30pm (20 min):</b> open Claude Code in C:\\Life, say &ldquo;weekly review.&rdquo; '
+    +'Count the dots, fix what kept failing (change the block, not yourself), refresh the week&rsquo;s goals.</p>'
+    +'<p><b>Anything chafes?</b> Wake time, workout slot, block lengths — say it and it changes the same day.</p>'
+    +'<p><b>Aug 24:</b> classes begin; this app switches to the semester schedule on its own.</p></section>';
+  };
+
+  var render=function(focusSel){
+    var now=nowDate();
+    var dk=dkey(now);
+    var st=dayState(dk);
+    var html=headerHTML(now,st);
+    if(tab==='now') html+=nowHTML(now,st);
+    else if(tab==='goals') html+=goalsHTML(now);
+    else html+=planHTML();
+    html+='<footer>managed with Claude &middot; C:\\Life &middot; Sunday 1:30pm &mdash; weekly review</footer>';
+    app.innerHTML=html;
+    if(focusSel){
+      var el=app.querySelector(focusSel);
+      if(el) el.focus();
+    }
+  };
+
+  app.addEventListener('click',function(e){
+    var el=e.target.closest?e.target.closest('[data-act]'):null;
+    if(!el) return;
+    var act=el.getAttribute('data-act');
+    var now=nowDate(), dk=dkey(now);
+    if(act==='tab'){
+      tab=el.getAttribute('data-tab'); render();
+    }else if(act==='task'){
+      var id=el.getAttribute('data-id');
+      var s=dayState(dk);
+      if(s.checks[id]) delete s.checks[id]; else s.checks[id]=true;
+      saveDay(dk,s);
+      render('[data-act][data-id="'+id+'"]');
+    }else if(act==='wktask'){
+      var wid=el.getAttribute('data-id');
+      var wk=dkey(monday(now));
+      var ws=weekState(wk);
+      if(ws.checks[wid]) delete ws.checks[wid]; else ws.checks[wid]=true;
+      saveWeek(wk,ws);
+      render('[data-act][data-id="'+wid+'"]');
+    }else if(act==='expand'){
+      var b=el.getAttribute('data-block');
+      expanded[b]=!expanded[b];
+      render();
+    }else if(act==='mode'){
+      var s2=dayState(dk);
+      s2.mode=(s2.mode==='min')?'full':'min';
+      saveDay(dk,s2);
+      render();
+    }
+  });
+
+  setInterval(function(){render()},30000);
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden) render(); });
+  render();
+})();
+</script>
+</body>
+</html>
