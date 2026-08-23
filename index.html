@@ -44,6 +44,11 @@
     --good-soft:rgba(147,196,127,.12); --accent-soft:rgba(234,166,62,.10);
   }
 
+  :root{--alert:#b3402c}
+  @media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){--alert:#e8836a} }
+  :root[data-theme="dark"]{--alert:#e8836a}
+  :root[data-theme="light"]{--alert:#b3402c}
+
   *{box-sizing:border-box}
   html,body{margin:0;padding:0}
   body{
@@ -133,6 +138,26 @@
   }
   .thint{margin-left:auto; flex:none; font:500 12px var(--mono); color:var(--muted)}
   @keyframes pop{from{transform:scale(.5)}to{transform:scale(1)}}
+
+  /* ---------- inbox ---------- */
+  .inbox{background:var(--card); border:1px solid var(--line);
+    border-left:3px solid var(--accent); border-radius:14px;
+    padding:15px 16px 13px; margin-bottom:16px}
+  .inbox-h{display:flex; align-items:baseline; justify-content:space-between;
+    gap:10px; margin-bottom:4px}
+  .inbox-t{font:700 11px var(--mono); letter-spacing:.2em; text-transform:uppercase;
+    color:var(--accent-text)}
+  .inbox-age{font:500 11.5px var(--mono); color:var(--muted)}
+  .inbox-i{display:flex; gap:10px; align-items:baseline; padding:9px 0;
+    border-top:1px solid var(--line); font-size:14.5px; line-height:1.35}
+  .inbox-who{font:600 11px var(--mono); color:var(--muted); text-transform:uppercase;
+    letter-spacing:.08em; flex:none; width:52px; padding-top:2px}
+  .inbox-due{margin-left:auto; flex:none; font:600 11.5px var(--mono);
+    color:var(--muted); white-space:nowrap; padding-top:2px}
+  .inbox-due.soon{color:var(--alert)}
+  .inbox-foot{font-size:12.5px; color:var(--muted); margin-top:11px}
+  .inbox-clear{font-size:14px; color:var(--good-text); font-weight:600; margin:4px 0 0}
+  .inbox-stale{font-size:13px; color:var(--muted); margin:4px 0 0}
 
   .upnext{font:500 13px var(--mono); color:var(--muted); margin:12px 2px 22px}
   .upnext b{color:var(--accent-text); font-weight:600}
@@ -293,11 +318,17 @@
     [{id:'m-up',label:'Out of bed + drink the water by your bed',min:true,short:'Water',hint:hint},
      {id:'wake.1',label:'Open the blinds — real light in your eyes'},
      {id:'wake.2',label:"Stay off the phone until you're vertical"}]);};
-  var humanB=function(s,e){return B('human',s,e,'Get human',
-    "You act like the person you're dressed as.",
-    [{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},
-     {id:'human.1',label:'Shower'},
-     {id:'human.2',label:'Real clothes + make the bed'}]);};
+  var humanB=function(s,e,noShower){return B('human',s,e,'Get human',
+    noShower?'You showered last night. This is teeth, clothes, go.'
+            :"You act like the person you're dressed as.",
+    noShower?[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},
+              {id:'human.1',label:'The clothes you laid out last night'}]
+            :[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},
+              {id:'human.1',label:'Shower'},
+              {id:'human.2',label:'Real clothes + make the bed'}]);};
+  var commuteB=function(s,e,why,bagLabel){return B('transit',s,e,'Drive in + walk from the lot',why,
+    [{id:'transit.0',label:bagLabel},
+     {id:'m-walk',label:'The walk in from the lot — that\'s your 15 minutes outside',min:true,short:'Walk',hint:'the lot walk'}]);};
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
     'Half of getting ripped happens at meals.',
     quick?[{id:'breakfast.0',label:'Protein even in a hurry — a shake and a banana counts'}]
@@ -332,12 +363,16 @@
   var eveningB=function(s,e){return B('evening',s,e,'Evening — yours',
     "Be where your feet are. The job hunt is on tomorrow's schedule, not tonight's.",
     [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]);};
-  var shutdownB=function(s,e,bedLabel,why){return B('shutdown',s,e,'Shutdown',
-    why||'Tomorrow is decided right now, not in the morning.',
-    [{id:'shutdown.0',label:'Refill the water glass, set it by the bed'},
-     {id:'shutdown.1',label:'Phone on the charger, out of arm\'s reach'},
-     {id:'shutdown.2',label:'Stage tomorrow: bag packed, clothes out, 30-second look at this app'},
-     {id:'m-bed',label:bedLabel,min:true,short:'Lights out',hint:'tonight'}]);};
+  var shutdownB=function(s,e,bedLabel,why,extras){
+    var t=(extras||[]).concat([
+      {id:'shutdown.0',label:'Refill the water glass, set it by the bed'},
+      {id:'shutdown.1',label:'Phone on the charger, out of arm\'s reach'},
+      {id:'shutdown.2',label:'Stage tomorrow: bag packed, clothes out, 30-second look at this app'},
+      {id:'m-bed',label:bedLabel,min:true,short:'Lights out',hint:'tonight'}]);
+    return B('shutdown',s,e,'Shutdown',
+      why||'Tomorrow is decided right now, not in the morning.',t);};
+  var SWEEP={id:'shutdown.inbox',label:'Inbox sweep — open Claude and say /inbox (5 min)'};
+  var SHOWER={id:'shutdown.shower',label:'Shower tonight — it buys you 20 minutes at 7am'};
   var reviewB=function(s,e){return B('review',s,e,'Weekly review',
     'Twenty minutes of steering saves a week of drifting.',
     [{id:'review.0',label:'Open Claude Code in C:\\Life and say "weekly review"'},
@@ -380,39 +415,40 @@
     var tthHead=function(){
       return [
         wakeB('07:00','07:15','first thing'),
-        humanB('07:15','07:45'),
-        breakfastB('07:45','08:10',true),
-        B('transit','08:10','08:30','Get to JSOM',
-          'Out the door by 8:10 puts you in the seat with time to spare.',
-          [{id:'transit.0',label:'Bag was packed last night — grab and go'}]),
+        humanB('07:15','07:35',true),
+        breakfastB('07:35','07:50',true),
+        commuteB('07:50','08:30',
+          'Door to seat is about 35 minutes. Leaving at 7:50 is the whole difference between walking in and sprinting in.',
+          'Bag was packed last night — grab and go'),
         classB('cs4390','08:30','09:45','CS 4390 · Networks','JSOM 1.110','the 8:30 is brutal; go anyway'),
-        careerB('09:45','11:30','Dead gap between classes = the career block. Library or an ECSS lounge.'),
+        careerB('09:45','11:30','That 105-minute gap is the best career block of your week — you\'re already on campus. Library or an ECSS lounge.'),
         classB('cs4349','11:30','12:45','CS 4349 · Algorithms','ECSS 2.415','this class IS interview prep'),
         lunchB('12:45','13:45'),
         studyB('13:45','15:15'),
-        walkB('15:15','15:45','campus counts')
+        B('reset','15:15','15:45','Reset',
+          'Long evening still ahead. Refuel now, not at 10pm.',
+          [{id:'reset.0',label:'Water and something with protein'},
+           {id:'reset.1',label:'Five minutes of actual nothing'}])
       ];
     };
     if(dow===1||dow===3){ /* Mon, Wed */
       return [
         wakeB('08:00','08:20','first thing'),
         humanB('08:20','08:50'),
-        breakfastB('08:50','09:30',false),
-        B('transit','09:30','10:00','Head to campus',
-          'Leaving on time is the whole trick.',
-          [{id:'transit.0',label:'Bag: laptop, charger, water bottle'},
-           {id:'transit.1',label:'Walking by 9:40 — ECSS 2.415 by 9:55'}]),
+        breakfastB('08:50','09:15',false),
+        commuteB('09:15','10:00',
+          'Door to seat is about 35 minutes. Out by 9:15 and you arrive calm.',
+          'Bag: laptop, charger, water bottle'),
         classB('cs4391','10:00','11:15','CS 4391 · Computer Vision','ECSS 2.415','attendance is most of the grade in disguise'),
         lunchB('11:15','12:00'),
-        careerB('12:00','13:30',SEASON_WHY),
+        careerB('12:00','13:30','You\'re on campus till the 4:30 lift anyway — this is found time, not extra time.'),
         studyB('13:30','15:00'),
-        walkB('15:00','15:30','anytime'),
-        freeB('15:30','16:30','Earned.'),
+        freeB('15:00','16:30','Earned. Stay on campus — the gym is right there.'),
         liftB('16:30','17:45'),
         dinnerB('17:45','19:00'),
         eveningB('19:00','22:00'),
         shutdownB('22:00','22:30','In bed, lights out by 11:00 — tomorrow starts at 7:00',
-          'Early day tomorrow. Win it tonight.')
+          'Tomorrow is an 8:30 class. Win it tonight.',[SHOWER,SWEEP])
       ];
     }
     if(dow===2){ /* Tue — the gauntlet */
@@ -426,7 +462,7 @@
           'PHY 1.304 — the fun one. Music is not a wasted Tuesday.',
           [{id:'musi.0',label:'Be there by 7:00'}]),
         shutdownB('21:45','22:30','In bed, lights out by 11:00',
-          'Tuesday is the gauntlet — and you just survived it. Straight to bed.')
+          'Tuesday is the gauntlet — and you just survived it. Straight to bed.',[SWEEP])
       ]);
     }
     if(dow===4){ /* Thu */
@@ -436,7 +472,7 @@
         dinnerB('18:45','19:45'),
         B('evening','19:45','22:00','Evening — yours','Thursday night is earned.',
           [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]),
-        shutdownB('22:00','22:30','In bed, lights out by 11:30')
+        shutdownB('22:00','22:30','In bed, lights out by 11:30',null,[SWEEP])
       ]);
     }
     if(dow===5){ /* Fri — no classes */
@@ -492,7 +528,8 @@
       dinnerB('17:45','19:00'),
       B('evening','19:00','21:30','Evening — easy','School week starts tomorrow.',
         [{id:'evening.0',label:'Wind down early tonight'}]),
-      shutdownB('21:30','22:00','In bed, lights out by 11:00 — Monday starts at 8:00')
+      shutdownB('21:30','22:00','In bed, lights out by 11:00 — Monday starts at 8:00',
+        'Sunday night sets the whole week. Sweep the inbox so Monday has no surprises.',[SWEEP])
     ];
   };
 
@@ -507,20 +544,30 @@
     {id:'body',tag:'Body',
      vision:'Lean and strong — the guy who obviously lifts.',
      phase:'Now (Aug–Oct): build the habit, learn the lifts, eat protein. Consistency now, abs later.',
-     week:['Lift 3× — A / B / A','Walk every day','Protein at every meal','One weigh-in: baseline, zero judgment']},
+     week:['Lift 3× — Mon / Wed / Fri at 4:30','Stock the new kitchen: eggs, chicken, rice, yogurt, frozen veg','Protein at every meal','One weigh-in: baseline, zero judgment']},
     {id:'career',tag:'Career',
      vision:'Signed SWE offer before May 2027 graduation.',
-     phase:'Now: application season just opened — early applications count double. Volume + daily practice.',
-     week:['Resume rebuilt — one page','10 applications (Simplify new-grad list)','5 LeetCode easies (NeetCode 150)','Handshake updated + find the fall ECS career-fair date']},
+     phase:'Now: peak new-grad season, and it overlaps week one of classes. Protect the campus gap — that\'s the block that survives a busy week.',
+     week:['Resume rebuilt — one page','6 applications (Simplify new-grad list)','4 LeetCode easies (NeetCode 150)','Find the ECS career fair date on Handshake']},
     {id:'money',tag:'Money',
      vision:'High savings rate from day one of the job — early retirement and three kids become math problems with known answers.',
-     phase:"Now: see clearly. You can't steer numbers you can't see.",
-     week:['30-minute money map with Claude (accounts, debts, monthly burn)','Notice every purchase this week — just notice']},
+     phase:"Now: see clearly. New apartment means new fixed costs — get them on paper before they get away from you.",
+     week:['30-minute money map with Claude (accounts, debts, monthly burn)','Rent + utilities on autopay so they can never be a surprise','Notice every purchase this week — just notice']},
     {id:'us',tag:'Us',
      vision:'The kind of partner someone builds a life with.',
      phase:'Now: show up steady.',
-     week:['One real date this week — planned by you','Tell her about this system. One ally beats zero.']}
+     week:['Friday date night — planned by you','Cook her dinner in the new place','Tell her about this system. One ally beats zero.']}
   ];
+
+  /* ---------- inbox (written by Claude's /inbox sweep, fetched here) ---------- */
+  var inbox=null;
+  var loadInbox=function(){
+    if(typeof fetch!=='function') return;
+    fetch('inbox.json',{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(j){ if(j&&typeof j==='object'){ inbox=j; render(); } })
+      .catch(function(){});
+  };
 
   /* ---------- render ---------- */
   var app=document.getElementById('app');
@@ -544,6 +591,48 @@
       +'<span class="box">'+(done?CHECK:'')+'</span>'
       +'<span class="lbl">'+t.label+'</span>'
       +'<span class="thint">'+hint+'</span></button>';
+  };
+
+  var esc=function(s){
+    return String(s==null?'':s).replace(/[&<>"]/g,function(c){
+      return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];
+    });
+  };
+
+  var inboxHTML=function(now){
+    if(!inbox) return '';
+    var items=Array.isArray(inbox.needsYou)?inbox.needsYou:[];
+    var swept=inbox.swept?new Date(inbox.swept):null;
+    var hrs=(swept&&!isNaN(swept))?Math.floor((now-swept)/3600000):null;
+    var age='';
+    if(hrs!==null) age = hrs<1?'just swept' : (hrs<24?('swept '+hrs+'h ago')
+      : ('swept '+Math.floor(hrs/24)+'d ago'));
+    var stale = hrs!==null && hrs>=72;
+
+    var body;
+    if(inbox.setup||!swept||isNaN(swept)){
+      body='<p class="inbox-stale">Not sweeping yet. Install the Claude extension in Chrome, '
+        +'then open Claude on your PC and say <b>/inbox</b>.</p>';
+    }else if(stale){
+      body='<p class="inbox-stale">Last sweep was '+age.replace('swept ','')
+        +'. Open Claude and say <b>/inbox</b> to refresh.</p>';
+    }else if(!items.length){
+      body='<p class="inbox-clear">Nothing needs you. Inbox is handled.</p>';
+    }else{
+      body=items.slice(0,5).map(function(it){
+        var due=it.due?('<span class="inbox-due'+(it.soon?' soon':'')+'">'+esc(it.due)+'</span>'):'';
+        var who=it.who?('<span class="inbox-who">'+esc(it.who)+'</span>'):'';
+        return '<div class="inbox-i">'+who+'<span>'+esc(it.what)+'</span>'+due+'</div>';
+      }).join('');
+      if(items.length>5){
+        body+='<p class="inbox-foot">+'+(items.length-5)+' more in the sweep.</p>';
+      }
+    }
+    var fyi=(typeof inbox.worthKnowing==='number'&&inbox.worthKnowing>0&&!stale)
+      ? '<p class="inbox-foot">'+inbox.worthKnowing+' more worth knowing — nothing needed from you.</p>' : '';
+    return '<section class="inbox"><div class="inbox-h">'
+      +'<span class="inbox-t">Inbox</span><span class="inbox-age">'+esc(age)+'</span></div>'
+      +body+fyi+'</section>';
   };
 
   var headerHTML=function(now,st){
@@ -646,6 +735,8 @@
     }
     html+='<p class="upnext">Up next &middot; <b>'+nextLabel+'</b></p>';
 
+    html+=inboxHTML(now);
+
     /* today timeline */
     html+='<p class="sectionlabel">Today</p><div class="tl-wrap">';
     blocks.forEach(function(b){
@@ -718,14 +809,26 @@
 
     +'<section class="pcard"><h3>The week, at a glance <span style="font:500 12px var(--mono);color:var(--muted)">semester</span></h3>'
     +'<div class="tablewrap"><table class="sched">'
-    +'<tr><td class="t">Mon/Wed</td><td>8:00 up &middot; 10:00 class &middot; 12:00 career &middot; study &middot; 4:30 lift &middot; 11:00 out</td></tr>'
-    +'<tr><td class="t">Tue</td><td>7:00 up &middot; 8:30 class &middot; gap = career &middot; 11:30 class &middot; 5:30 class &middot; 7:00 ensemble &middot; 11:00 out. <b>The gauntlet — floor mode is honorable here.</b></td></tr>'
+    +'<tr><td class="t">Mon/Wed</td><td>8:00 up &middot; <b>leave 9:15</b> &middot; 10:00 class &middot; 12:00 career &middot; study &middot; 4:30 lift &middot; 11:00 out</td></tr>'
+    +'<tr><td class="t">Tue</td><td>7:00 up &middot; <b>leave 7:50</b> &middot; 8:30 class &middot; gap = career &middot; 11:30 class &middot; 5:30 class &middot; 7:00 ensemble &middot; 11:00 out. <b>The gauntlet — floor mode is honorable here.</b></td></tr>'
     +'<tr><td class="t">Thu</td><td>Same start as Tue &middot; 5:30 class &middot; evening free &middot; 11:30 out</td></tr>'
     +'<tr><td class="t">Fri</td><td>8:00 up &middot; career + build &middot; 4:30 lift &middot; <b>date night</b> &middot; 12:30 out</td></tr>'
     +'<tr><td class="t">Sat</td><td>9:00 up &middot; one rep &middot; move + fun &middot; 12:30 out</td></tr>'
     +'<tr><td class="t">Sun</td><td>9:00 up &middot; one rep &middot; 1:30 review &middot; rest &middot; 11:00 out</td></tr>'
     +'</table></div>'
-    +'<p>Until Aug 23 the app runs the summer schedule (9:00 wake, career block 10:45, lift M/W/F 4:30). It switches over automatically.</p></section>'
+    +'<p><b>The commute is ~35 minutes door to seat</b> — short drive, then 15&ndash;20 minutes walking in from the lot. '
+    +'Two consequences baked into the schedule: that walk <b>is</b> your daily 10 minutes outside on class days, '
+    +'and on Monday and Wednesday nights you shower before bed, which buys back 20 minutes at 7am.</p></section>'
+
+    +'<section class="pcard"><h3>Alarms &amp; calendar</h3>'
+    +'<p>Notifications live on your <b>phone</b>, not in Claude — Claude only runs when your PC is on, which is exactly when you don\'t need waking up.</p>'
+    +'<p><b>Four alarms to set once:</b> 7:00am Tue/Thu &middot; 8:00am Mon/Wed/Fri &middot; 9:00am Sat/Sun &middot; 10:30pm every night (the shutdown bell).</p>'
+    +'<p><b>Calendar:</b> import <b>fall-2026.ics</b> from C:\\Life and every class, lift, date night and review lands on your phone with alerts &mdash; including &ldquo;leave now&rdquo; warnings timed to the commute.</p></section>'
+
+    +'<section class="pcard"><h3>The inbox sweep</h3>'
+    +'<p>Email is the thing that quietly eats you: professors, recruiters with deadlines, bills, people waiting on a reply.</p>'
+    +'<p><b>Every weeknight at shutdown</b>, open Claude and say <b>/inbox</b>. It reads Gmail in your browser, sorts what it finds, and pushes a short list to this app &mdash; so whatever needs you shows up on your phone in the morning, above the day\'s timeline.</p>'
+    +'<p>Five minutes at the desk. Nothing to remember, nothing to miss.</p></section>'
 
     +'<section class="pcard"><h3>Workouts</h3><div class="wo">'
     +'<div><h4>Workout A</h4><ul>'
@@ -744,7 +847,7 @@
     +'<p><b>Sundays, 1:30pm (20 min):</b> open Claude Code in C:\\Life, say &ldquo;weekly review.&rdquo; '
     +'Count the dots, fix what kept failing (change the block, not yourself), refresh the week&rsquo;s goals.</p>'
     +'<p><b>Anything chafes?</b> Wake time, workout slot, block lengths — say it and it changes the same day.</p>'
-    +'<p><b>Aug 24:</b> classes begin; this app switches to the semester schedule on its own.</p></section>';
+    +'<p><b>Semester:</b> Aug 24 &ndash; Dec 12. The app already switched to the class schedule.</p></section>';
   };
 
   var render=function(focusSel){
@@ -796,8 +899,11 @@
   });
 
   setInterval(function(){render()},30000);
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden) render(); });
+  document.addEventListener('visibilitychange',function(){
+    if(!document.hidden){ render(); loadInbox(); }
+  });
   render();
+  loadInbox();
 })();
 </script>
 </body>
