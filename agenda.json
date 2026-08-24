@@ -20,7 +20,8 @@
     { "id": "gradapp", "type": "todo", "text": "Apply for graduation in Galaxy — it opens the same day spring registration does (late Oct / early Nov). Miss it and there's a late fee." },
     { "id": "resume", "type": "todo", "text": "Rebuild the resume to one page — needs to be done by Sep 15, before the career fairs" },
     { "id": "rent", "type": "todo", "text": "Confirm the rent due date and set up autopay" },
-    { "id": "money", "type": "todo", "text": "30-minute money map with Claude" },
+    { "id": "money", "type": "todo", "text": "30-minute money map with Claude — income, rent, utilities, card balance, what's actually left" },
+    { "id": "moneycsv", "type": "todo", "text": "Discover → Statements → Download Transactions → save the CSV to C:\\Life\\money\\, then say /money" },
 
     { "id": "cv-4390-grade", "type": "note", "tag": "CS 4390", "text": "Grading: attendance 5% · quizzes 20% · project 20% · midterm 25% · final 30%. Showing up is literally worth a third of a letter grade." },
     { "id": "cv-4390-oh", "type": "note", "tag": "CS 4390", "text": "Prof. Imtiaz Karim holds office hours TuTh 10–11:30am — that's inside your campus gap, same building trip. Free help you're already parked for." },

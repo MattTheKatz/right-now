@@ -267,6 +267,26 @@
   .phase{color:var(--muted); font-size:13.5px; margin:0 0 10px}
   .gnote{font-size:13px; color:var(--muted); margin:6px 2px 0}
 
+  /* ---------- money ---------- */
+  .mny{border-top:1px solid var(--line); margin:2px -16px 0; padding:14px 16px 4px;
+    background:color-mix(in srgb, var(--card2) 45%, transparent)}
+  .mny-h{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+  .mny-p{font:700 10.5px var(--mono); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted)}
+  .mny-n{font:800 25px var(--sans); letter-spacing:-.02em; font-variant-numeric:tabular-nums}
+  .mny-t{font:600 12px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums}
+  .mny-track{height:6px; background:var(--card2); border:1px solid var(--line);
+    border-radius:999px; overflow:hidden; margin:9px 0 12px}
+  .mny-fill{height:100%; background:var(--good); border-radius:999px}
+  .mny-fill.over{background:var(--alert)}
+  .mny-c{display:flex; align-items:center; gap:9px; font-size:13.5px; margin:7px 0}
+  .mny-bar{flex:1; height:5px; background:var(--card2); border-radius:999px; overflow:hidden}
+  .mny-bar span{display:block; height:100%; background:var(--accent); border-radius:999px}
+  .mny-amt{font:600 12.5px var(--mono); color:var(--muted); font-variant-numeric:tabular-nums;
+    min-width:44px; text-align:right}
+  .mny-note{font-size:13px; color:var(--muted); margin:11px 0 8px; max-width:42ch}
+  .mny-none{font-size:13px; color:var(--muted); margin:2px 0 8px}
+
   /* ---------- plan ---------- */
   .pcard{background:var(--card); border:1px solid var(--line); border-radius:14px;
     padding:18px 16px; margin-bottom:14px}
@@ -635,6 +655,14 @@
 
   /* ---------- agenda (repo items from Claude + local items from his phone) ---------- */
   var agendaRepo=null;
+  var money=null;
+  var loadMoney=function(){
+    if(typeof fetch!=='function') return;
+    fetch('money.json',{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(j){ if(j&&typeof j==='object'){ money=j; render(); } })
+      .catch(function(){});
+  };
   var loadAgenda=function(){
     if(typeof fetch!=='function') return;
     fetch('agenda.json',{cache:'no-store'})
@@ -989,6 +1017,31 @@
     return html;
   };
 
+  var moneyHTML=function(){
+    if(!money) return '<div class="mny"><p class="mny-none">No spending data yet. '
+      +'Export your Discover transactions to <b>C:\\Life\\money\\</b> and say <b>/money</b>.</p></div>';
+    var spent=Number(money.spent)||0;
+    var target=(money.target==null)?null:Number(money.target);
+    var cats=Array.isArray(money.categories)?money.categories.slice(0,4):[];
+    var max=cats.reduce(function(m,c){return Math.max(m,Number(c.amount)||0)},0)||1;
+    var pct=target?Math.min(100,Math.round(spent/target*100)):0;
+    var over=target&&spent>target;
+    return '<div class="mny">'
+      +'<div class="mny-h"><span class="mny-p">'+esc(money.period||'This month')+'</span>'
+      +(target?('<span class="mny-t">'+pct+'% of $'+target+'</span>'):'')+'</div>'
+      +'<div class="mny-n">$'+spent.toLocaleString()+'</div>'
+      +(target?('<div class="mny-track"><span class="mny-fill'+(over?' over':'')
+        +'" style="width:'+pct+'%"></span></div>'):'<div style="height:10px"></div>')
+      +cats.map(function(c){
+        var a=Number(c.amount)||0;
+        return '<div class="mny-c"><span>'+esc(c.name)+'</span>'
+          +'<span class="mny-bar"><span style="width:'+Math.round(a/max*100)+'%"></span></span>'
+          +'<span class="mny-amt">$'+a.toLocaleString()+'</span></div>';
+      }).join('')
+      +(money.note?'<p class="mny-note">'+esc(money.note)+'</p>':'')
+      +'</div>';
+  };
+
   var goalsHTML=function(now){
     var mon=monday(now);
     var wk=dkey(mon);
@@ -1003,7 +1056,9 @@
         +'<div class="eyebrow">'+g.tag+'</div>'
         +'<p class="vision">'+g.vision+'</p>'
         +'<p class="phase">'+g.phase+'</p>'
-        +'<div class="tasks">'+rows+'</div></section>';
+        +'<div class="tasks">'+rows+'</div>'
+        +(g.id==='money'?moneyHTML():'')
+        +'</section>';
     });
     html+='<p class="gnote">These are the week\'s moves, not the whole mountain. Want one swapped? Tell Claude.</p>';
     return html;
@@ -1175,11 +1230,12 @@
 
   setInterval(function(){ if(!adding) render(); },30000);
   document.addEventListener('visibilitychange',function(){
-    if(!document.hidden && !adding){ render(); loadInbox(); loadAgenda(); }
+    if(!document.hidden && !adding){ render(); loadInbox(); loadAgenda(); loadMoney(); }
   });
   render();
   loadInbox();
   loadAgenda();
+  loadMoney();
 })();
 </script>
 </body>
