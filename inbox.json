@@ -1,6 +1,30 @@
 {
-  "setup": true,
-  "swept": null,
-  "needsYou": [],
-  "worthKnowing": 0
+  "swept": "2026-08-23T19:40:00-05:00",
+  "needsYou": [
+    {
+      "who": "Fin Aid",
+      "what": "Aid is BLOCKED until you upload your final high school transcript (or GED). Galaxy → Orion → Student Center → Tasks",
+      "due": "ASAP",
+      "soon": true
+    },
+    {
+      "who": "Canvas",
+      "what": "eLearning moved to utdallas.instructure.com starting tomorrow — the first email they sent had a broken link",
+      "due": "Mon",
+      "soon": true
+    },
+    {
+      "who": "Wind Ens",
+      "what": "Member info form now; chair audition video due Fri noon — you need the trumpet from home",
+      "due": "Fri 8/28",
+      "soon": false
+    },
+    {
+      "who": "Advising",
+      "what": "Add/swap ends Aug 31 · drop-without-W Sep 9 · dept hold needs an advisor meeting before spring registration",
+      "due": "Aug 31",
+      "soon": false
+    }
+  ],
+  "worthKnowing": 6
 }
