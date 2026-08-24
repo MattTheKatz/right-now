@@ -159,6 +159,67 @@
   .inbox-clear{font-size:14px; color:var(--good-text); font-weight:600; margin:4px 0 0}
   .inbox-stale{font-size:13px; color:var(--muted); margin:4px 0 0}
 
+  .inbox.coming{border-left-color:var(--good)}
+  .inbox.coming .inbox-t{color:var(--good-text)}
+
+  /* ---------- agenda ---------- */
+  .ag-add{display:flex; align-items:center; justify-content:center; gap:8px; width:100%;
+    background:var(--card2); border:1px dashed var(--line); border-radius:12px;
+    padding:13px; margin-bottom:16px; cursor:pointer;
+    font:600 14px var(--sans); color:var(--accent-text)}
+  .ag-add:hover{border-color:var(--accent); background:var(--accent-soft)}
+  .ag-form{background:var(--card); border:1px solid var(--accent); border-radius:14px;
+    padding:15px; margin-bottom:16px; display:flex; flex-direction:column; gap:11px}
+  .ag-form input[type=text], .ag-form input[type=date]{
+    width:100%; font:500 15px var(--sans); color:var(--ink);
+    background:var(--bg); border:1px solid var(--line); border-radius:9px; padding:11px 12px}
+  .ag-form input:focus{outline:2px solid var(--accent); outline-offset:-1px}
+  .seg{display:flex; gap:4px; background:var(--card2); border:1px solid var(--line);
+    border-radius:999px; padding:3px}
+  .seg button{flex:1; font:600 12.5px var(--sans); color:var(--muted); background:none;
+    border:0; border-radius:999px; padding:8px 0; cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--accent); color:var(--accent-contrast)}
+  .dayrow{display:flex; gap:5px}
+  .dayrow button{flex:1; font:600 12px var(--mono); color:var(--muted); background:var(--card2);
+    border:1px solid var(--line); border-radius:8px; padding:9px 0; cursor:pointer}
+  .dayrow button[aria-pressed="true"]{background:var(--accent); color:var(--accent-contrast);
+    border-color:var(--accent)}
+  .ag-btns{display:flex; gap:8px; justify-content:flex-end}
+  .ag-btns button{font:600 14px var(--sans); border-radius:999px; padding:10px 20px;
+    cursor:pointer; border:1px solid var(--line); background:var(--card2); color:var(--muted)}
+  .ag-btns button.go{background:var(--accent); color:var(--accent-contrast); border-color:var(--accent)}
+
+  .ag-sec{margin-bottom:22px}
+  .ag-sec h3{font:700 11px var(--mono); letter-spacing:.18em; text-transform:uppercase;
+    color:var(--muted); margin:0 2px 9px}
+  .ag-list{background:var(--card); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden}
+  .ag-i{display:flex; align-items:flex-start; gap:12px; padding:12px 14px;
+    border-top:1px solid var(--line); min-height:48px}
+  .ag-i:first-child{border-top:0}
+  .ag-chk{flex:none; width:23px; height:23px; margin-top:1px; border-radius:7px;
+    border:2px solid var(--muted); background:none; color:var(--bg);
+    display:grid; place-items:center; cursor:pointer; padding:0}
+  .ag-chk:hover{border-color:var(--accent)}
+  .ag-i.on .ag-chk{background:var(--good); border-color:var(--good)}
+  .ag-txt{flex:1; font:500 15px/1.35 var(--sans); color:var(--ink);
+    background:none; border:0; text-align:left; padding:0; cursor:default}
+  .ag-i.on .ag-txt{opacity:.45; text-decoration:line-through;
+    text-decoration-thickness:1px; text-decoration-color:var(--muted)}
+  .ag-when{display:block; font:600 11.5px var(--mono); color:var(--muted); margin-top:3px;
+    text-decoration:none}
+  .ag-when.soon{color:var(--accent-text)}
+  .ag-when.late{color:var(--alert)}
+  .ag-when.today{color:var(--good-text)}
+  .ag-src{flex:none; align-self:center; font:700 9px var(--mono); letter-spacing:.12em;
+    text-transform:uppercase; color:var(--muted); border:1px solid var(--line);
+    border-radius:999px; padding:3px 6px}
+  .ag-del{flex:none; align-self:center; background:none; border:0; cursor:pointer;
+    color:var(--muted); font:500 17px var(--sans); line-height:1; padding:4px 6px}
+  .ag-del:hover{color:var(--alert)}
+  .ag-empty{font-size:13.5px; color:var(--muted); padding:14px; text-align:center}
+  .ag-note{font-size:12.5px; color:var(--muted); margin:0 2px 18px}
+
   .upnext{font:500 13px var(--mono); color:var(--muted); margin:12px 2px 22px}
   .upnext b{color:var(--accent-text); font-weight:600}
 
@@ -569,10 +630,75 @@
       .catch(function(){});
   };
 
+  /* ---------- agenda (repo items from Claude + local items from his phone) ---------- */
+  var agendaRepo=null;
+  var loadAgenda=function(){
+    if(typeof fetch!=='function') return;
+    fetch('agenda.json',{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(j){ if(j&&Array.isArray(j.items)){ agendaRepo=j.items; render(); } })
+      .catch(function(){});
+  };
+  var readJSON=function(k,fallback){
+    var s; try{ s=JSON.parse(store.get(k)); }catch(e){ s=null; }
+    return s==null?fallback:s;
+  };
+  var myItems=function(){ var a=readJSON('rn1:agmine',[]); return Array.isArray(a)?a:[]; };
+  var saveMine=function(a){ store.set('rn1:agmine',JSON.stringify(a)); };
+  var agDone=function(){ var o=readJSON('rn1:agdone',{}); return (o&&typeof o==='object')?o:{}; };
+  var saveDone=function(o){ store.set('rn1:agdone',JSON.stringify(o)); };
+
+  var allAgenda=function(){
+    var out=[];
+    (agendaRepo||[]).forEach(function(it,i){
+      out.push({id:'r:'+(it.id||i), src:'r', type:it.type||'todo',
+        text:it.text, date:it.date, time:it.time, days:it.days});
+    });
+    myItems().forEach(function(it){
+      out.push({id:it.id, src:'m', type:it.type,
+        text:it.text, date:it.date, time:it.time, days:it.days});
+    });
+    return out;
+  };
+
+  var DAYNAME=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var dayDiff=function(now,ds){
+    if(!ds) return null;
+    var p=String(ds).split('-');
+    if(p.length!==3) return null;
+    var d=new Date(+p[0],+p[1]-1,+p[2]);
+    if(isNaN(d)) return null;
+    var t=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+    return Math.round((d-t)/86400000);
+  };
+  var dueLabel=function(n){
+    if(n<0) return (-n===1)?'1 day late':((-n)+' days late');
+    if(n===0) return 'today';
+    if(n===1) return 'tomorrow';
+    if(n<7) return 'in '+n+' days';
+    if(n<14) return 'in a week';
+    return 'in '+Math.round(n/7)+' weeks';
+  };
+  var dueClass=function(n){
+    if(n<0) return 'late';
+    if(n===0) return 'today';
+    if(n<=3) return 'soon';
+    return '';
+  };
+
   /* ---------- render ---------- */
   var app=document.getElementById('app');
   var tab='now';
   var expanded={};
+  var adding=false, addType='deadline', addDays=[], addText='', addDate='';
+  var syncForm=function(){
+    var t=document.getElementById('agtext'), d=document.getElementById('agdate');
+    if(t) addText=t.value;
+    if(d) addDate=d.value;
+  };
+  var resetForm=function(){
+    adding=false; addType='deadline'; addDays=[]; addText=''; addDate='';
+  };
 
   var CHECK='<svg viewBox="0 0 16 16" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 8.5l3.5 3.5 7-8"/></svg>';
   var CHEV='<svg class="chev" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6l4 4 4-4"/></svg>';
@@ -635,6 +761,104 @@
       +body+fyi+'</section>';
   };
 
+  var comingHTML=function(now){
+    var done=agDone();
+    var soon=allAgenda().filter(function(it){
+      if(it.type!=='deadline'||done[it.id]) return false;
+      var n=dayDiff(now,it.date);
+      return n!==null && n<=7;
+    }).map(function(it){ it._n=dayDiff(now,it.date); return it; })
+      .sort(function(a,b){ return a._n-b._n; });
+    if(!soon.length) return '';
+    return '<section class="inbox coming"><div class="inbox-h">'
+      +'<span class="inbox-t">Coming up</span>'
+      +'<span class="inbox-age">'+soon.length+' with a clock</span></div>'
+      +soon.slice(0,4).map(function(it){
+        return '<div class="inbox-i"><span>'+esc(it.text)+'</span>'
+          +'<span class="inbox-due'+(it._n<=3?' soon':'')+'">'+esc(dueLabel(it._n))+'</span></div>';
+      }).join('')
+      +(soon.length>4?'<p class="inbox-foot">+'+(soon.length-4)+' more on the Agenda tab.</p>':'')
+      +'</section>';
+  };
+
+  var agRow=function(it,now,done){
+    var on=!!done[it.id];
+    var when='';
+    if(it.type==='deadline'&&it.date){
+      var n=dayDiff(now,it.date);
+      if(n!==null){
+        var p=it.date.split('-');
+        when='<span class="ag-when '+dueClass(n)+'">'+dueLabel(n)+' &middot; '
+          +DAYNAME[new Date(+p[0],+p[1]-1,+p[2]).getDay()]+' '+(+p[1])+'/'+(+p[2])
+          +(it.time?(' '+esc(it.time)):'')+'</span>';
+      }
+    }else if(it.type==='repeat'&&Array.isArray(it.days)&&it.days.length){
+      var todayIs=it.days.indexOf(now.getDay())>=0;
+      when='<span class="ag-when'+(todayIs?' today':'')+'">'
+        +it.days.map(function(d){return DAYNAME[d]}).join(' · ')
+        +(todayIs?' — that\'s today':'')+'</span>';
+    }
+    return '<div class="ag-i'+(on?' on':'')+'">'
+      +(it.type==='note'?'<span class="ag-chk" style="border:0"></span>'
+        :'<button class="ag-chk" data-act="agtoggle" data-id="'+esc(it.id)+'" aria-pressed="'+on+'" aria-label="Done">'
+          +(on?CHECK:'')+'</button>')
+      +'<span class="ag-txt">'+esc(it.text)+when+'</span>'
+      +(it.src==='r'?'<span class="ag-src">Claude</span>'
+        :'<button class="ag-del" data-act="agdel" data-id="'+esc(it.id)+'" aria-label="Delete">&times;</button>')
+      +'</div>';
+  };
+
+  var agSection=function(title,items,now,done,empty){
+    return '<section class="ag-sec"><h3>'+title+'</h3><div class="ag-list">'
+      +(items.length?items.map(function(it){return agRow(it,now,done)}).join('')
+        :'<p class="ag-empty">'+empty+'</p>')
+      +'</div></section>';
+  };
+
+  var agendaHTML=function(now){
+    var done=agDone();
+    var all=allAgenda();
+    var html='';
+
+    if(adding){
+      var TYPES=[['deadline','Deadline'],['todo','To-do'],['repeat','Repeats'],['note','Note']];
+      html+='<div class="ag-form">'
+        +'<input type="text" id="agtext" placeholder="What is it?" autocomplete="off" value="'+esc(addText)+'">'
+        +'<div class="seg">'+TYPES.map(function(t){
+            return '<button data-act="agtype" data-type="'+t[0]+'" aria-pressed="'
+              +(addType===t[0])+'">'+t[1]+'</button>';
+          }).join('')+'</div>'
+        +(addType==='deadline'?'<input type="date" id="agdate" value="'+esc(addDate)+'">':'')
+        +(addType==='repeat'?'<div class="dayrow">'+DAYNAME.map(function(d,i){
+            return '<button data-act="agday" data-day="'+i+'" aria-pressed="'
+              +(addDays.indexOf(i)>=0)+'">'+d[0]+'</button>';
+          }).join('')+'</div>':'')
+        +'<div class="ag-btns"><button data-act="agcancel">Cancel</button>'
+        +'<button class="go" data-act="agsave">Add it</button></div></div>';
+    }else{
+      html+='<button class="ag-add" data-act="agopen">+ Add something</button>';
+    }
+
+    var deadlines=all.filter(function(i){return i.type==='deadline'})
+      .map(function(i){ i._n=dayDiff(now,i.date); return i; })
+      .sort(function(a,b){
+        if(a._n===null) return 1; if(b._n===null) return -1;
+        return a._n-b._n;
+      });
+    var todos=all.filter(function(i){return i.type==='todo'});
+    var reps=all.filter(function(i){return i.type==='repeat'});
+    var notes=all.filter(function(i){return i.type==='note'});
+
+    html+=agSection('Deadlines',deadlines,now,done,'Nothing with a clock on it.');
+    html+=agSection('To-do',todos,now,done,'Nothing outstanding.');
+    if(reps.length) html+=agSection('Every week',reps,now,done,'');
+    if(notes.length) html+=agSection('Notes',notes,now,done,'');
+    html+='<p class="ag-note">Items marked <b>Claude</b> come from your plan and the inbox sweep — '
+      +'I add and update those. Anything you add here lives on this phone. '
+      +'Deadlines inside a week also show up on the Now tab.</p>';
+    return html;
+  };
+
   var headerHTML=function(now,st){
     var dk=dkey(now);
     var keys=weekKeys(monday(now));
@@ -657,6 +881,7 @@
       +(store.live?'':'<div class="storagewarn">This browser is blocking saved check-marks — they\'ll reset on refresh.</div>')
       +'<nav class="tabs">'
       +'<button data-act="tab" data-tab="now" aria-current="'+(tab==='now')+'">Now</button>'
+      +'<button data-act="tab" data-tab="agenda" aria-current="'+(tab==='agenda')+'">Agenda</button>'
       +'<button data-act="tab" data-tab="goals" aria-current="'+(tab==='goals')+'">Goals</button>'
       +'<button data-act="tab" data-tab="plan" aria-current="'+(tab==='plan')+'">Plan</button>'
       +'</nav>';
@@ -735,6 +960,7 @@
     }
     html+='<p class="upnext">Up next &middot; <b>'+nextLabel+'</b></p>';
 
+    html+=comingHTML(now);
     html+=inboxHTML(now);
 
     /* today timeline */
@@ -856,6 +1082,7 @@
     var st=dayState(dk);
     var html=headerHTML(now,st);
     if(tab==='now') html+=nowHTML(now,st);
+    else if(tab==='agenda') html+=agendaHTML(now);
     else if(tab==='goals') html+=goalsHTML(now);
     else html+=planHTML();
     html+='<footer>managed with Claude &middot; C:\\Life &middot; Sunday 1:30pm &mdash; weekly review</footer>';
@@ -895,15 +1122,55 @@
       s2.mode=(s2.mode==='min')?'full':'min';
       saveDay(dk,s2);
       render();
+    }else if(act==='agopen'){
+      adding=true; render('#agtext');
+    }else if(act==='agcancel'){
+      resetForm(); render();
+    }else if(act==='agtype'){
+      syncForm(); addType=el.getAttribute('data-type'); render('#agtext');
+    }else if(act==='agday'){
+      syncForm();
+      var d=+el.getAttribute('data-day');
+      var at=addDays.indexOf(d);
+      if(at>=0) addDays.splice(at,1); else addDays.push(d);
+      addDays.sort();
+      render('#agtext');
+    }else if(act==='agsave'){
+      syncForm();
+      var text=(addText||'').trim();
+      if(!text){ render('#agtext'); return; }
+      var item={id:'m:'+Date.now(),type:addType,text:text};
+      if(addType==='deadline'){
+        if(!addDate){ render('#agdate'); return; }
+        item.date=addDate;
+      }
+      if(addType==='repeat'){
+        if(!addDays.length){ render('#agtext'); return; }
+        item.days=addDays.slice();
+      }
+      var mine=myItems(); mine.push(item); saveMine(mine);
+      resetForm(); render();
+    }else if(act==='agtoggle'){
+      var aid=el.getAttribute('data-id');
+      var dn=agDone();
+      if(dn[aid]) delete dn[aid]; else dn[aid]=true;
+      saveDone(dn);
+      render('[data-act="agtoggle"][data-id="'+aid.replace(/"/g,'\\"')+'"]');
+    }else if(act==='agdel'){
+      var did=el.getAttribute('data-id');
+      saveMine(myItems().filter(function(x){return x.id!==did}));
+      var dn2=agDone(); delete dn2[did]; saveDone(dn2);
+      render();
     }
   });
 
-  setInterval(function(){render()},30000);
+  setInterval(function(){ if(!adding) render(); },30000);
   document.addEventListener('visibilitychange',function(){
-    if(!document.hidden){ render(); loadInbox(); }
+    if(!document.hidden && !adding){ render(); loadInbox(); loadAgenda(); }
   });
   render();
   loadInbox();
+  loadAgenda();
 })();
 </script>
 </body>

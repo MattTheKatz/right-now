@@ -1,0 +1,21 @@
+{
+  "updated": "2026-08-23T20:10:00-05:00",
+  "items": [
+    { "id": "audition", "type": "deadline", "text": "Wind Ensemble chair audition — video submission", "date": "2026-08-28", "time": "12:00 noon" },
+    { "id": "addswap", "type": "deadline", "text": "Last day to add or swap classes", "date": "2026-08-31" },
+    { "id": "dropw", "type": "deadline", "text": "Last day to drop a class without a \"W\"", "date": "2026-09-09" },
+    { "id": "census", "type": "deadline", "text": "Census Day — schedule is locked after this", "date": "2026-09-10" },
+
+    { "id": "transcript", "type": "todo", "text": "Upload final high school transcript — financial aid is blocked until you do" },
+    { "id": "windform", "type": "todo", "text": "Fill out the Wind Ensemble member information form" },
+    { "id": "advisor", "type": "todo", "text": "See Jacky Trinh to clear the ECS department hold — do it around midterms, not during spring registration" },
+    { "id": "resume", "type": "todo", "text": "Rebuild the resume to one page" },
+    { "id": "fair", "type": "todo", "text": "Find the ECS career fair date on Handshake and put it here" },
+    { "id": "rent", "type": "todo", "text": "Confirm the rent due date and set up autopay" },
+    { "id": "money", "type": "todo", "text": "30-minute money map with Claude" },
+
+    { "id": "canvas", "type": "note", "text": "eLearning is Canvas now: utdallas.instructure.com (the first email they sent had a broken link)" },
+    { "id": "advising", "type": "note", "text": "Quick Advising runs Aug 24–28, 10am–2pm at ECS South 2.502 — first come, 10 minutes, no appointment" },
+    { "id": "windfirst", "type": "note", "text": "Ensemble first class Tue 8/25, 7pm, PHY 1.304 — logistics only, no rehearsal, don't bring your own horn" }
+  ]
+}
