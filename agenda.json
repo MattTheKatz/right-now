@@ -6,7 +6,6 @@
     { "id": "dropw", "type": "deadline", "text": "Last day to drop a class without a \"W\"", "date": "2026-09-09" },
     { "id": "census", "type": "deadline", "text": "Census Day — schedule is locked after this", "date": "2026-09-10" },
 
-    { "id": "transcript", "type": "todo", "text": "Upload final high school transcript — financial aid is blocked until you do" },
     { "id": "windform", "type": "todo", "text": "Fill out the Wind Ensemble member information form" },
     { "id": "advisor", "type": "todo", "text": "See Jacky Trinh to clear the ECS department hold — do it around midterms, not during spring registration" },
     { "id": "resume", "type": "todo", "text": "Rebuild the resume to one page" },

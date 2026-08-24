@@ -2,12 +2,6 @@
   "swept": "2026-08-23T19:40:00-05:00",
   "needsYou": [
     {
-      "who": "Fin Aid",
-      "what": "Aid is BLOCKED until you upload your final high school transcript (or GED). Galaxy → Orion → Student Center → Tasks",
-      "due": "ASAP",
-      "soon": true
-    },
-    {
       "who": "Canvas",
       "what": "eLearning moved to utdallas.instructure.com starting tomorrow — the first email they sent had a broken link",
       "due": "Mon",

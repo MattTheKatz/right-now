@@ -214,6 +214,9 @@
   .ag-src{flex:none; align-self:center; font:700 9px var(--mono); letter-spacing:.12em;
     text-transform:uppercase; color:var(--muted); border:1px solid var(--line);
     border-radius:999px; padding:3px 6px}
+  .ag-tag{display:inline-block; font:700 9.5px var(--mono); letter-spacing:.08em;
+    text-transform:uppercase; color:var(--accent-text); background:var(--accent-soft);
+    border-radius:5px; padding:2px 6px; margin-right:7px; vertical-align:1px}
   .ag-del{flex:none; align-self:center; background:none; border:0; cursor:pointer;
     color:var(--muted); font:500 17px var(--sans); line-height:1; padding:4px 6px}
   .ag-del:hover{color:var(--alert)}
@@ -652,7 +655,7 @@
     var out=[];
     (agendaRepo||[]).forEach(function(it,i){
       out.push({id:'r:'+(it.id||i), src:'r', type:it.type||'todo',
-        text:it.text, date:it.date, time:it.time, days:it.days});
+        text:it.text, date:it.date, time:it.time, days:it.days, tag:it.tag});
     });
     myItems().forEach(function(it){
       out.push({id:it.id, src:'m', type:it.type,
@@ -774,7 +777,9 @@
       +'<span class="inbox-t">Coming up</span>'
       +'<span class="inbox-age">'+soon.length+' with a clock</span></div>'
       +soon.slice(0,4).map(function(it){
-        return '<div class="inbox-i"><span>'+esc(it.text)+'</span>'
+        return '<div class="inbox-i">'
+          +(it.tag?'<span class="inbox-who">'+esc(it.tag)+'</span>':'')
+          +'<span>'+esc(it.text)+'</span>'
           +'<span class="inbox-due'+(it._n<=3?' soon':'')+'">'+esc(dueLabel(it._n))+'</span></div>';
       }).join('')
       +(soon.length>4?'<p class="inbox-foot">+'+(soon.length-4)+' more on the Agenda tab.</p>':'')
@@ -802,7 +807,8 @@
       +(it.type==='note'?'<span class="ag-chk" style="border:0"></span>'
         :'<button class="ag-chk" data-act="agtoggle" data-id="'+esc(it.id)+'" aria-pressed="'+on+'" aria-label="Done">'
           +(on?CHECK:'')+'</button>')
-      +'<span class="ag-txt">'+esc(it.text)+when+'</span>'
+      +'<span class="ag-txt">'+(it.tag?'<span class="ag-tag">'+esc(it.tag)+'</span>':'')
+        +esc(it.text)+when+'</span>'
       +(it.src==='r'?'<span class="ag-src">Claude</span>'
         :'<button class="ag-del" data-act="agdel" data-id="'+esc(it.id)+'" aria-label="Delete">&times;</button>')
       +'</div>';
