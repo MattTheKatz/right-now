@@ -1,16 +1,16 @@
 {
-  "swept": "2026-08-23T19:40:00-05:00",
+  "swept": "2026-08-24T22:05:00-05:00",
   "needsYou": [
     {
-      "who": "Canvas",
-      "what": "eLearning moved to utdallas.instructure.com starting tomorrow — the first email they sent had a broken link",
-      "due": "Mon",
+      "who": "Wind Ens",
+      "what": "Chair audition video due Friday noon — record it Wednesday night, Friday's practice block is after the deadline",
+      "due": "Fri 8/28",
       "soon": true
     },
     {
-      "who": "Wind Ens",
-      "what": "Member info form now; chair audition video due Fri noon — you need the trumpet from home",
-      "due": "Fri 8/28",
+      "who": "Utilities",
+      "what": "Conservice set up your apartment utilities — your mom forwarded it. Confirm who's actually paying it before the first bill",
+      "due": "this week",
       "soon": false
     },
     {
@@ -20,5 +20,5 @@
       "soon": false
     }
   ],
-  "worthKnowing": 6
+  "worthKnowing": 9
 }
