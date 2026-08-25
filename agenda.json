@@ -1,11 +1,11 @@
 {
-  "updated": "2026-08-24T21:15:00-05:00",
+  "updated": "2026-08-24T22:00:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
       "type": "deadline",
       "tag": "Lydia",
-      "text": "Drive Lydia to Wells Fargo, 3:45–4:45 — hard stop, CS 4348 is at 5:30. Pack food.",
+      "text": "Drop Lydia at Wells Fargo, 3:45–4:15 (drop-off only). Back in time for the 4:45 dinner — eat it, Tuesday runs till 10.",
       "date": "2026-08-25",
       "time": "3:45pm"
     },
@@ -224,6 +224,21 @@
       "id": "trashnote",
       "type": "note",
       "text": "Heads up: the 4–6pm valet window collides with your campus days. Mon/Wed you are not home until ~6:15, Tue not until 10, Thu ~7. Sunday is your one reliable trash night — the app puts it there."
+    },
+    {
+      "id": "discover",
+      "type": "todo",
+      "text": "Log into Discover, then turn on transaction alerts (email, $0 threshold) — that is what makes daily spending tracking work"
+    },
+    {
+      "id": "stores",
+      "type": "todo",
+      "text": "Make accounts: Walmart (9 min, cheapest) and Tom Thumb (7 min, closest with pickup). Then say /groceries."
+    },
+    {
+      "id": "storenote",
+      "type": "note",
+      "text": "Measured drive times from Northside: Sprouts 6 min · Tom Thumb 7 · Walmart Supercenter 9 · Kroger (Coit) 11 · ALDI 16. Kroger is NOT the close one."
     }
   ]
 }
