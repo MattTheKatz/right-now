@@ -267,6 +267,21 @@
   .phase{color:var(--muted); font-size:13.5px; margin:0 0 10px}
   .gnote{font-size:13px; color:var(--muted); margin:6px 2px 0}
 
+  /* ---------- today / tomorrow switch ---------- */
+  .tlhead{display:flex; align-items:center; gap:6px; margin:0 2px 10px}
+  .tlhead button{font:700 11px var(--mono); letter-spacing:.18em; text-transform:uppercase;
+    color:var(--muted); background:none; border:0; padding:4px 2px; cursor:pointer}
+  .tlhead button[aria-current="true"]{color:var(--ink)}
+  .tlhead .sep{color:var(--line); font-size:12px}
+  .tlhead .dl{margin-left:auto; font:500 11.5px var(--mono); color:var(--muted);
+    text-transform:none; letter-spacing:0}
+  .tl-ro .tl-h{cursor:default}
+  .tl-ro .tl-count{display:none}
+  .rotask{display:flex; gap:11px; align-items:flex-start; padding:9px 6px;
+    border-top:1px solid var(--line); font:500 14.5px/1.35 var(--sans); color:var(--muted)}
+  .rodot{flex:none; width:6px; height:6px; border-radius:50%; background:var(--line);
+    margin-top:7px}
+
   /* ---------- grades ---------- */
   .gr{display:flex; gap:8px; overflow-x:auto; padding:2px 2px 10px; margin-bottom:6px;
     -webkit-overflow-scrolling:touch}
@@ -610,7 +625,10 @@
         trumpetB('15:45','16:30','A horn and 45 free minutes before the 5:30 class. Practice rooms are right there.'),
         freeB('16:30','17:30','Or get ahead on assignments — Friday-you will notice.'),
         classB('cs4348','17:30','18:45','CS 4348 · Operating Systems','ECSW 1.365',null),
-        dinnerB('18:45','19:45'),
+        B('dinner','18:45','19:45','Dinner',
+          'Cooking is a money skill, a health skill, and honestly a date skill.',
+          [{id:'dinner.0',label:'Cook it yourself: protein + carb + something green'},
+           {id:'trash-thu',label:'Trash bin out if you got home before 6 — otherwise it waits for Sunday'}]),
         B('evening','19:45','22:00','Evening — yours','Thursday night is earned.',
           [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]),
         shutdownB('22:00','22:30','In bed, lights out by 11:30',null,[SWEEP])
@@ -677,7 +695,10 @@
       walkB('15:00','15:30','anytime'),
       trumpetB('15:30','15:55','Light day — warm-up and long tones only. Rest is when chops actually rebuild.',
         [{id:'trumpet.0',label:'Easy playing only. No range work today.'}]),
-      freeB('15:55','17:45','Rest day — the muscle gets built today.'),
+      B('free','15:55','17:45','Free',
+        'Rest day — the muscle gets built today. Also the one reliable trash night.',
+        [{id:'trash',label:'Valet trash: bin outside the door between 4 and 6'},
+         {id:'free.0',label:'Whatever you want — zero guilt'}]),
       dinnerB('17:45','19:00'),
       B('evening','19:00','21:30','Evening — easy','School week starts tomorrow.',
         [{id:'evening.0',label:'Wind down early tonight'}]),
@@ -811,6 +832,7 @@
   var app=document.getElementById('app');
   var tab='now';
   var expanded={};
+  var tlDay=0;
   var adding=false, addType='deadline', addDays=[], addText='', addDate='';
   var syncForm=function(){
     var t=document.getElementById('agtext'), d=document.getElementById('agdate');
@@ -1104,21 +1126,43 @@
     html+=comingHTML(now);
     html+=inboxHTML(now);
 
-    /* today timeline */
-    html+='<p class="sectionlabel">Today</p><div class="tl-wrap">';
-    blocks.forEach(function(b){
-      var done=b.tasks.filter(function(t){return !!checks[t.id]}).length;
-      var total=b.tasks.length;
-      var isCur=cur&&cur.id===b.id;
-      var open=!!expanded[b.id];
-      html+='<div class="tl'+(isCur?' cur':'')+'">'
-        +'<button class="tl-h" data-act="expand" data-block="'+b.id+'" aria-expanded="'+open+'">'
-        +'<span class="tl-time">'+fmt(b.s)+'</span>'
-        +'<span class="tl-title">'+b.title+'</span>'
-        +'<span class="tl-count'+(done===total?' full':'')+'">'+done+'/'+total+'</span>'
-        +(open?CHEVO:CHEV)+'</button>'
-        +(open?'<div class="tl-tasks">'+b.tasks.map(function(t){return taskRow(t,checks,'task')}).join('')+'</div>':'')
-        +'</div>';
+    /* timeline — today or tomorrow */
+    var tmr=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1);
+    var showT=(tlDay===1);
+    var tblocks=showT?dayBlocks(tmr):blocks;
+
+    html+='<div class="tlhead">'
+      +'<button data-act="tlday" data-d="0" aria-current="'+(!showT)+'">Today</button>'
+      +'<span class="sep">/</span>'
+      +'<button data-act="tlday" data-d="1" aria-current="'+showT+'">Tomorrow</button>'
+      +(showT?'<span class="dl">'+tmr.toLocaleDateString(undefined,{weekday:'long',month:'short',day:'numeric'})+'</span>':'')
+      +'</div><div class="tl-wrap'+(showT?' tl-ro':'')+'">';
+
+    tblocks.forEach(function(b){
+      var open=!!expanded[(showT?'t:':'')+b.id];
+      if(showT){
+        html+='<div class="tl">'
+          +'<button class="tl-h" data-act="expand" data-block="t:'+b.id+'" aria-expanded="'+open+'">'
+          +'<span class="tl-time">'+fmt(b.s)+'</span>'
+          +'<span class="tl-title">'+b.title+'</span>'
+          +(open?CHEVO:CHEV)+'</button>'
+          +(open?'<div class="tl-tasks">'+b.tasks.map(function(t){
+              return '<div class="rotask"><span class="rodot"></span><span>'+t.label+'</span></div>';
+            }).join('')+'</div>':'')
+          +'</div>';
+      }else{
+        var done=b.tasks.filter(function(t){return !!checks[t.id]}).length;
+        var total=b.tasks.length;
+        var isCur=cur&&cur.id===b.id;
+        html+='<div class="tl'+(isCur?' cur':'')+'">'
+          +'<button class="tl-h" data-act="expand" data-block="'+b.id+'" aria-expanded="'+open+'">'
+          +'<span class="tl-time">'+fmt(b.s)+'</span>'
+          +'<span class="tl-title">'+b.title+'</span>'
+          +'<span class="tl-count'+(done===total?' full':'')+'">'+done+'/'+total+'</span>'
+          +(open?CHEVO:CHEV)+'</button>'
+          +(open?'<div class="tl-tasks">'+b.tasks.map(function(t){return taskRow(t,checks,'task')}).join('')+'</div>':'')
+          +'</div>';
+      }
     });
     html+='</div>';
     return html;
@@ -1356,6 +1400,8 @@
       s2.mode=(s2.mode==='min')?'full':'min';
       saveDay(dk,s2);
       render();
+    }else if(act==='tlday'){
+      tlDay=+el.getAttribute('data-d'); render();
     }else if(act==='woopen'){
       wOpen=true; wType=wNext(); render();
     }else if(act==='wocancel'){

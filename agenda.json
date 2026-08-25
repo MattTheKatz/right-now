@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-24T19:45:00-05:00",
+  "updated": "2026-08-24T20:30:00-05:00",
   "items": [
     {
       "id": "audition",
@@ -125,11 +125,6 @@
       "text": "Order Earl Irons \"27 Groups of Exercises\" — the flexibility book your routine is missing"
     },
     {
-      "id": "applied",
-      "type": "todo",
-      "text": "Ask VandenBush about applied trumpet lessons for credit — a real teacher beats any routine I can write"
-    },
-    {
       "id": "resume",
       "type": "todo",
       "text": "Rebuild the resume to one page — needs to be done by Sep 15, before the career fairs"
@@ -204,6 +199,23 @@
       "id": "trumpet-note",
       "type": "note",
       "text": "Daily trumpet routine is in the Plan tab. Rest as much as you play; stop when tired. Tuesday ensemble counts as the day’s practice."
+    },
+    {
+      "id": "trash",
+      "type": "repeat",
+      "text": "Valet trash — bin outside the door 4–6pm (pickup Sun–Thu nights; bins must be IN on Fri/Sat)",
+      "days": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "id": "trashnote",
+      "type": "note",
+      "text": "Heads up: the 4–6pm valet window collides with your campus days. Mon/Wed you are not home until ~6:15, Tue not until 10, Thu ~7. Sunday is your one reliable trash night — the app puts it there."
     }
   ]
 }
