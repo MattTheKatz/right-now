@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-24T23:30:00-05:00",
+  "updated": "2026-08-24T22:35:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -166,11 +166,6 @@
       "text": "Final exam is December, exact date still TBD on the syllabus"
     },
     {
-      "id": "canvasrest",
-      "type": "note",
-      "text": "Only CS 4390 is published on Canvas so far — the other four open up as instructors publish them. Say /canvas to re-check."
-    },
-    {
       "id": "advising",
       "type": "note",
       "text": "Quick Advising runs Aug 24–28, 10am–2pm at ECS South 2.502 — first come, 10 minutes, no appointment"
@@ -236,6 +231,16 @@
       "tag": "Lydia",
       "text": "Hadestown performance week — exact night still TBD, ask Lydia",
       "date": "2027-01-11"
+    },
+    {
+      "id": "profs",
+      "type": "note",
+      "text": "Your professors: CS 4348 Neeraj Gupta · CS 4349 James Willson · CS 4390 Imtiaz Karim (office hours TuTh 10–11:30, inside your campus gap) · CS 4391 Yapeng Tian · MUSI 3120 Nick VandenBush"
+    },
+    {
+      "id": "canvasrest",
+      "type": "note",
+      "text": "All 5 courses are live on Canvas now, but only CS 4390 has real content. No assignments posted anywhere yet — normal for week 1. Say /canvas anytime to re-check."
     }
   ]
 }
