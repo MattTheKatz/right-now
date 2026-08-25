@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-24T22:20:00-05:00",
+  "updated": "2026-08-24T23:30:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -138,11 +138,6 @@
       "text": "Rebuild the resume to one page — needs to be done by Sep 15, before the career fairs"
     },
     {
-      "id": "rent",
-      "type": "todo",
-      "text": "Confirm the rent due date and set up autopay"
-    },
-    {
       "id": "money",
       "type": "todo",
       "text": "30-minute money map with Claude — income, rent, utilities, card balance, what's actually left"
@@ -231,14 +226,16 @@
       "text": "Log into Discover, then turn on transaction alerts (email, $0 threshold) — that is what makes daily spending tracking work"
     },
     {
-      "id": "stores",
-      "type": "todo",
-      "text": "Make accounts: Walmart (cheapest, best pickup) + Tom Thumb (closest). Then say /groceries."
-    },
-    {
       "id": "storenote",
       "type": "note",
       "text": "Measured from 850 Cecil Dr: Tom Thumb 8 min · Sprouts 8 · Target 9 · Whole Foods 9 · Walmart 10 · Kroger 13 · ALDI 16. Kroger is the far one."
+    },
+    {
+      "id": "hadestown-show",
+      "type": "deadline",
+      "tag": "Lydia",
+      "text": "Hadestown performance week — exact night still TBD, ask Lydia",
+      "date": "2027-01-11"
     }
   ]
 }
