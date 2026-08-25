@@ -456,22 +456,27 @@
     [{id:'m-up',label:'Out of bed + drink the water by your bed',min:true,short:'Water',hint:hint},
      {id:'wake.1',label:'Open the blinds — real light in your eyes'},
      {id:'wake.2',label:"Stay off the phone until you're vertical"}]);};
+  var SKIN_AM=[
+    {id:'sk.am1',label:'Wash face — gentle cleanser, lukewarm water. No scrubbing.'},
+    {id:'sk.am2',label:'Moisturizer with SPF 30. This is the step that actually gets you "glowing" and stops marks from darkening.'}
+  ];
+  var SHOWER_TASK={id:'human.1',label:'Shower — benzoyl peroxide wash on back and shoulders. Lather, leave it 2 minutes, then rinse.'};
   var humanB=function(s,e,noShower){return B('human',s,e,'Get human',
-    noShower?'You showered last night. This is teeth, clothes, go.'
-            :"You act like the person you're dressed as.",
-    noShower?[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},
-              {id:'human.1',label:'The clothes you laid out last night'}]
-            :[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},
-              {id:'human.1',label:'Shower'},
-              {id:'human.2',label:'Real clothes + make the bed'}]);};
+    noShower?'You showered last night. Teeth, face, clothes, go.'
+            :"You act like the person you are dressed as.",
+    noShower?[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'}]
+              .concat(SKIN_AM,[{id:'human.1b',label:'The clothes you laid out last night'}])
+            :[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},SHOWER_TASK]
+              .concat(SKIN_AM,[{id:'human.2',label:'Real clothes + make the bed'}]));};
   var commuteB=function(s,e,why,bagLabel){return B('transit',s,e,'Drive in + walk from the lot',why,
     [{id:'transit.0',label:bagLabel},
      {id:'m-walk',label:'The walk in from the lot — that\'s your 15 minutes outside',min:true,short:'Walk',hint:'the lot walk'}]);};
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
-    'Half of getting ripped happens at meals.',
-    quick?[{id:'breakfast.0',label:'Protein even in a hurry — a shake and a banana counts'}]
-         :[{id:'breakfast.0',label:'Something with protein — eggs, Greek yogurt, a shake'},
-           {id:'breakfast.1',label:'Coffee with food, not instead of it'}]);};
+    'Target today: 2,450 calories and 195g protein. Protein is the one that matters.',
+    quick?[{id:'breakfast.0',label:'Grab an overnight oats jar from the fridge. ~45g protein, no prep.'},
+           {id:'breakfast.1',label:'Coffee — black or with milk, not a 400-calorie latte.'}]
+         :[{id:'breakfast.0',label:'Overnight oats jar, or 4 eggs + Greek yogurt. ~45g protein either way.'},
+           {id:'breakfast.1',label:'Coffee with food, not instead of it.'}]);};
   var careerB=function(s,e,why){return B('career',s,e,'Career block',why,
     [{id:'m-rep',label:'One job rep: submit 1 application or solve 1 problem',min:true,short:'Job rep',hint:'anytime'},
      {id:'career.1',label:'2 more applications (Simplify new-grad list)'},
@@ -479,17 +484,35 @@
   var walkB=function(s,e,hint){return B('walk',s,e,'Walk',
     "Sun and steps fix more brain chemistry than you'd expect.",
     [{id:'m-walk',label:'10–20 minutes outside — no destination needed',min:true,short:'Walk',hint:hint}]);};
-  var lunchB=function(s,e){return B('lunch',s,e,'Lunch','',
-    [{id:'lunch.0',label:'Real food, protein again'},
-     {id:'lunch.1',label:'Eat away from the screen'}]);};
+  var lunchB=function(s,e){return B('lunch',s,e,'Lunch',
+    'Prepped Sunday. No decision to make.',
+    [{id:'lunch.0',label:'Prepped container: chicken + rice + roasted veg. ~55g protein.'},
+     {id:'lunch.1',label:'Eat away from the screen.'}]);};
   var studyB=function(s,e){return B('study',s,e,'Study block',
     "Grades are a byproduct of starting before it's urgent.",
     [{id:'study.0',label:'90 minutes on assignments — hardest class first'},
      {id:'study.1',label:'Log one line: what did today add?'}]);};
-  var liftB=function(s,e){return B('workout',s,e,'Lift day',
-    'Ripped is about 150 ordinary workouts away. This is one of them.',
-    [{id:'workout.0',label:'Workout A or B — see the Plan tab (~45 min)'},
-     {id:'workout.1',label:'Log your weights (notes app is fine)'}]);};
+  var LIFTS={
+    A:[['Goblet squat','3×8','Dumbbell at your chest. Sit down between your knees, heels flat.'],
+       ['Bench press or push-ups','3×8','Shoulder blades pinned back. Bar to mid-chest, elbows tucked ~45°.'],
+       ['One-arm dumbbell row','3×10 each','Knee on the bench. Pull to your hip, not your armpit.'],
+       ['Plank','3×30 sec','Squeeze your glutes. Do not let the hips sag.']],
+    B:[['Romanian deadlift','3×8','Push the hips back, bar stays against your legs. Stop when the hamstrings load.'],
+       ['Dumbbell overhead press','3×8','Ribs down. Do not arch your lower back to get it up.'],
+       ['Lat pulldown or assisted pull-up','3×10','Pull to your collarbone, lead with the elbows.'],
+       ['Farmer carry','3× down and back','Go heavy. Tall posture, do not shrug.']]
+  };
+  var liftB=function(s,e){
+    var t=(typeof wNext==='function')?wNext():'A';
+    var tasks=[{id:'wo.warm',label:'Warm up — 5 min bike or brisk walk, then one light set of the first lift.'}];
+    LIFTS[t].forEach(function(x,i){
+      tasks.push({id:'wo.'+t+'.'+i, label:x[0]+' — '+x[1]+'. '+x[2]});
+    });
+    tasks.push({id:'wo.log',label:'Log it: Goals tab → Body → Log a workout. It prefills what you lifted last time.'});
+    tasks.push({id:'wo.shower',label:'Shower right after. Benzoyl peroxide wash on back and shoulders — lather, leave 2 min, rinse.'});
+    return B('workout',s,e,'Lift day — Workout '+t,
+      'Ripped is about 150 ordinary workouts away. This is one of them.', tasks);
+  };
   /* Lydia's Hadestown rehearsals — she needs a ride both ways. Real dates, not every Friday. */
   var HADESTOWN={
     '2026-08-28':'Rehearsal 3','2026-09-04':'Rehearsal','2026-09-11':'Rehearsal 4',
@@ -503,15 +526,24 @@
     [{id:'ride.0',label:'Leave by 4:40 so she is not rushed'},
      {id:'ride.1',label:'Bring the horn or the laptop — 90 minutes is a full practice or a career block'},
      {id:'ride.2',label:'Back at 6:30, then the evening is yours together'}]);};
-  var TR=[{id:'trumpet.0',label:'The daily routine — see the Plan tab'},
-          {id:'trumpet.1',label:'Log it so the streak stays visible'}];
+  var TR=[
+    {id:'tr.1',label:'Mouthpiece buzz — 3 min. Steady middle pitch, 15–20 sec each.'},
+    {id:'tr.2',label:'Long tones — 6 min. Soft, middle register, full breath. Centered tone is the only goal.'},
+    {id:'tr.3',label:'Lip slurs — 8 min. Slow. Tongue arches "ah" → "ee". Let the tongue do it, not the lips.'},
+    {id:'tr.4',label:'Clarke #1 and #2 — 5 min. Soft, light fingers.'},
+    {id:'tr.5',label:'Range work — 5 min. Only now that you are warm. Stop the second the tone degrades.'},
+    {id:'tr.6',label:'Music — 8 min. Ensemble parts, or something you just enjoy playing.'},
+    {id:'tr.7',label:'Cool down — 2 min. Descending long tones, very soft. Do not skip this.'},
+    {id:'tr.8',label:'Rest as much as you play. Horn off the face between every section.'}
+  ];
   var trumpetB=function(s,e,why,tasks){return B('trumpet',s,e,'Trumpet',why,tasks||TR);};
   var moveB=function(s,e){return B('workout',s,e,'Move day',
     'Easy days are where the hard days pay out.',
     [{id:'workout.0',label:'30+ minutes: long walk, bike, hoop, swim — anything'}]);};
   var dinnerB=function(s,e){return B('dinner',s,e,'Dinner',
     'Cooking is a money skill, a health skill, and honestly a date skill.',
-    [{id:'dinner.0',label:'Cook it yourself: protein + carb + something green'}]);};
+    [{id:'dinner.0',label:'Prepped container: ground beef or turkey + potatoes + green veg. ~60g protein.'},
+     {id:'dinner.1',label:'Short of 195g protein today? Greek yogurt or a shake closes the gap.'}]);};
   var freeB=function(s,e,why){return B('free',s,e,'Free',why,
     [{id:'free.0',label:'Whatever you want — zero guilt'}]);};
   var eveningB=function(s,e){return B('evening',s,e,'Evening — yours',
@@ -519,6 +551,9 @@
     [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]);};
   var shutdownB=function(s,e,bedLabel,why,extras){
     var t=(extras||[]).concat([
+      {id:'sk.pm1',label:'Wash face — gentle cleanser.'},
+      {id:'sk.pm2',label:'Adapalene (Differin) — pea-sized for the WHOLE face, not just spots. Every other night for the first 2 weeks.'},
+      {id:'sk.pm3',label:'Moisturizer on top. Adapalene dries you out and that is what makes people quit.'},
       {id:'shutdown.0',label:'Refill the water glass, set it by the bed'},
       {id:'shutdown.1',label:'Phone on the charger, out of arm\'s reach'},
       {id:'shutdown.2',label:'Stage tomorrow: bag packed, clothes out, 30-second look at this app'},

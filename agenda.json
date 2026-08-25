@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25T10:25:00-05:00",
+  "updated": "2026-08-25T10:55:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -254,7 +254,8 @@
       "date": "2026-08-29",
       "title": "Haircut: Mid taper fade",
       "start": "11:00",
-      "end": "12:00"
+      "end": "12:00",
+      "todo": "Say this: \"Mid taper fade on the sides and back, blending up from a 1. Leave about 2-3 inches on top, point-cut for texture, styled forward with a bit of fringe.\" Show a photo too. Then have Lydia rate it."
     },
     {
       "id": "hair-2",
@@ -264,7 +265,8 @@
       "date": "2026-09-19",
       "title": "Haircut: Low taper",
       "start": "11:00",
-      "end": "12:00"
+      "end": "12:00",
+      "todo": "Say this: \"Low taper on the sides, scissor-cut on top, leave 3 inches, soft side part on the left. Natural, not slicked.\" This is the career-fair cut. Then have Lydia rate it."
     },
     {
       "id": "hair-3",
@@ -274,7 +276,8 @@
       "date": "2026-10-17",
       "title": "Haircut: Burst fade",
       "start": "11:00",
-      "end": "12:00"
+      "end": "12:00",
+      "todo": "Say this: \"Burst fade around the ears tapered into the neckline. Top 2-3 inches, blunt-ish fringe, textured heavily.\" Then have Lydia rate it."
     },
     {
       "id": "hair-4",
@@ -284,7 +287,8 @@
       "date": "2026-11-14",
       "title": "Haircut: Middle part with a low taper",
       "start": "11:00",
-      "end": "12:00"
+      "end": "12:00",
+      "todo": "Say this: \"Low taper on the sides, keep the top long, about 4 inches, cut to fall into a middle part with curtains at the front.\" Then have Lydia rate it."
     },
     {
       "id": "hair-5",
@@ -294,7 +298,8 @@
       "date": "2026-12-12",
       "title": "Haircut: French crop, blunt fringe",
       "start": "11:00",
-      "end": "12:00"
+      "end": "12:00",
+      "todo": "Say this: \"High taper fade, 1.5-2 inches on top, fringe cut blunt straight across.\" Then have Lydia rate it."
     },
     {
       "id": "horn-week",
@@ -335,6 +340,23 @@
       "type": "note",
       "tag": "Body",
       "text": "2,450 kcal · 195g protein a day. Protein is the one that decides whether you lose fat or lose muscle — hit it even on bad days. Full plan and Sunday prep walkthrough in nutrition/PLAN.md."
+    },
+    {
+      "id": "skin-buy",
+      "type": "todo",
+      "text": "Buy the skincare 4: gentle cleanser (CeraVe/Cetaphil) · Differin adapalene 0.1% gel · moisturizer with SPF 30 · PanOxyl 10% benzoyl peroxide body wash. All at Walmart, about $45 total."
+    },
+    {
+      "id": "skin-note",
+      "type": "note",
+      "tag": "Skin",
+      "text": "It gets WORSE around weeks 2-4 before it gets better. That is purging, not failure, and it is where everyone quits. Real results at 8-12 weeks. Benzoyl peroxide bleaches fabric — use old towels and a white shirt after."
+    },
+    {
+      "id": "skin-doc",
+      "type": "note",
+      "tag": "Skin",
+      "text": "If you get painful deep nodules, scarring, or nothing improves by 12 weeks, see a dermatologist — that is prescription territory and worth it. UTD Student Health can refer you."
     }
   ]
 }
