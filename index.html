@@ -267,6 +267,45 @@
   .phase{color:var(--muted); font-size:13.5px; margin:0 0 10px}
   .gnote{font-size:13px; color:var(--muted); margin:6px 2px 0}
 
+  /* ---------- grades ---------- */
+  .gr{display:flex; gap:8px; overflow-x:auto; padding:2px 2px 10px; margin-bottom:6px;
+    -webkit-overflow-scrolling:touch}
+  .gr-i{flex:none; min-width:88px; background:var(--card); border:1px solid var(--line);
+    border-top:3px solid var(--good); border-radius:11px; padding:9px 11px}
+  .gr-i.mid{border-top-color:var(--accent)}
+  .gr-i.low{border-top-color:var(--alert)}
+  .gr-i.none{border-top-color:var(--line)}
+  .gr-c{font:700 10px var(--mono); letter-spacing:.1em; color:var(--muted);
+    text-transform:uppercase; white-space:nowrap}
+  .gr-s{font:800 19px var(--sans); letter-spacing:-.02em; margin-top:3px;
+    font-variant-numeric:tabular-nums}
+  .gr-s.dim{font-size:13px; font-weight:600; color:var(--muted); padding:4px 0 2px}
+  .gr-when{font:500 11.5px var(--mono); color:var(--muted); margin:0 2px 14px}
+
+  /* ---------- workout log ---------- */
+  .wo-l{border-top:1px solid var(--line); margin:2px -16px 0; padding:14px 16px 6px;
+    background:color-mix(in srgb, var(--card2) 45%, transparent)}
+  .wo-top{display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+    margin-bottom:10px}
+  .wo-cnt{font:700 10.5px var(--mono); letter-spacing:.16em; text-transform:uppercase;
+    color:var(--muted)}
+  .wo-next{font:700 12px var(--mono); color:var(--accent-text)}
+  .wo-last{display:flex; gap:9px; align-items:baseline; font-size:13.5px; margin:6px 0}
+  .wo-ex{flex:1; color:var(--muted)}
+  .wo-val{font:600 12.5px var(--mono); color:var(--ink); font-variant-numeric:tabular-nums}
+  .wo-up{font:600 12.5px var(--mono); color:var(--good-text)}
+  .wo-btn{display:block; width:100%; margin:12px 0 4px; padding:12px;
+    background:var(--accent); color:var(--accent-contrast); border:0; border-radius:10px;
+    font:700 14px var(--sans); cursor:pointer}
+  .wo-form{display:flex; flex-direction:column; gap:10px; margin:10px 0 4px}
+  .wo-row{display:flex; align-items:center; gap:10px}
+  .wo-row label{flex:1; font-size:13.5px}
+  .wo-row input{width:118px; flex:none; font:600 13px var(--mono); color:var(--ink);
+    background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:9px 10px}
+  .wo-row input:focus{outline:2px solid var(--accent); outline-offset:-1px}
+  .wo-hint{font-size:12.5px; color:var(--muted); margin:0}
+  .wo-none{font-size:13px; color:var(--muted); margin:2px 0 8px}
+
   /* ---------- money ---------- */
   .mny{border-top:1px solid var(--line); margin:2px -16px 0; padding:14px 16px 4px;
     background:color-mix(in srgb, var(--card2) 45%, transparent)}
@@ -436,6 +475,22 @@
     'Ripped is about 150 ordinary workouts away. This is one of them.',
     [{id:'workout.0',label:'Workout A or B — see the Plan tab (~45 min)'},
      {id:'workout.1',label:'Log your weights (notes app is fine)'}]);};
+  /* Lydia's Hadestown rehearsals — she needs a ride both ways. Real dates, not every Friday. */
+  var HADESTOWN={
+    '2026-08-28':'Rehearsal 3','2026-09-04':'Rehearsal','2026-09-11':'Rehearsal 4',
+    '2026-09-18':'Rehearsal 5','2026-09-25':'Rehearsal 6','2026-10-02':'Rehearsal 7',
+    '2026-10-16':'Rehearsal 9','2026-10-23':'Rehearsal 10','2026-10-30':'Rehearsal 11',
+    '2026-11-13':'Rehearsal 13','2026-12-04':'Rehearsal 14','2026-12-11':'Rehearsal 15',
+    '2027-01-08':'Rehearsal 16'
+  };
+  var rideB=function(label){return B('ride','16:40','18:45','Driving Lydia — '+label,
+    'She is on at 5:00 and out at 6:30. The 90 minutes in between are yours, not dead time.',
+    [{id:'ride.0',label:'Leave by 4:40 so she is not rushed'},
+     {id:'ride.1',label:'Bring the horn or the laptop — 90 minutes is a full practice or a career block'},
+     {id:'ride.2',label:'Back at 6:30, then the evening is yours together'}]);};
+  var TR=[{id:'trumpet.0',label:'The daily routine — see the Plan tab'},
+          {id:'trumpet.1',label:'Log it so the streak stays visible'}];
+  var trumpetB=function(s,e,why,tasks){return B('trumpet',s,e,'Trumpet',why,tasks||TR);};
   var moveB=function(s,e){return B('workout',s,e,'Move day',
     'Easy days are where the hard days pay out.',
     [{id:'workout.0',label:'30+ minutes: long walk, bike, hoop, swim — anything'}]);};
@@ -495,7 +550,7 @@
   };
 
   /* ---------- semester (from Aug 24) ---------- */
-  var semesterBlocks=function(dow){
+  var semesterBlocks=function(dow,dk){
     var tthHead=function(){
       return [
         wakeB('07:00','07:15','first thing'),
@@ -527,7 +582,8 @@
         lunchB('11:15','12:00'),
         careerB('12:00','13:30','You\'re on campus till the 4:30 lift anyway — this is found time, not extra time.'),
         studyB('13:30','15:00'),
-        freeB('15:00','16:30','Earned. Stay on campus — the gym is right there.'),
+        trumpetB('15:00','15:45','Book a practice room while you are already on campus — it never happens once you get home.'),
+        freeB('15:45','16:30','Earned. Stay on campus — the gym is right there.'),
         liftB('16:30','17:45'),
         dinnerB('17:45','19:00'),
         eveningB('19:00','22:00'),
@@ -551,7 +607,8 @@
     }
     if(dow===4){ /* Thu */
       return tthHead().concat([
-        freeB('15:45','17:30','Or get ahead on assignments — Friday-you will notice.'),
+        trumpetB('15:45','16:30','A horn and 45 free minutes before the 5:30 class. Practice rooms are right there.'),
+        freeB('16:30','17:30','Or get ahead on assignments — Friday-you will notice.'),
         classB('cs4348','17:30','18:45','CS 4348 · Operating Systems','ECSW 1.365',null),
         dinnerB('18:45','19:45'),
         B('evening','19:45','22:00','Evening — yours','Thursday night is earned.',
@@ -571,15 +628,23 @@
            {id:'build.1',label:'Log one line: what did this week add?'}]),
         lunchB('12:30','13:15'),
         walkB('13:15','13:45','anytime'),
-        freeB('13:45','16:30','Week\'s work is done.'),
-        liftB('16:30','17:45'),
-        B('dinner','17:45','19:00','Dinner — or date-night prep','',
-          [{id:'dinner.0',label:'Cook together if she\'s over — that counts double'}]),
+        liftB('13:45','15:00'),
+        trumpetB('15:00','15:45','Full routine while you are fresh — Friday is your longest practice window.'),
+        freeB('15:45','16:40','Earned. Lift and practice are already done.')
+      ].concat(HADESTOWN[dk] ? [
+        rideB(HADESTOWN[dk]),
+        B('evening','18:45','23:00','Date night',
+          'You just picked her up — go straight into it. Standing slot, planned by you.',
+          [{id:'evening.0',label:'All-in: plan made, phone down'}]),
+        shutdownB('23:00','23:30','In bed by 12:30 — weekend rules')
+      ] : [
+        B('dinner','16:40','19:00','Dinner — or date-night prep','',
+          [{id:'dinner.0',label:'Cook together if she is over — that counts double'}]),
         B('evening','19:00','23:00','Date night',
           'Friday is the standing date slot — planned by you.',
           [{id:'evening.0',label:'All-in: plan made, phone down'}]),
         shutdownB('23:00','23:30','In bed by 12:30 — weekend rules')
-      ];
+      ]);
     }
     if(dow===6){ /* Sat */
       return [
@@ -587,10 +652,12 @@
         humanB('09:20','10:00'),
         breakfastB('10:00','10:45',false),
         walkB('10:45','11:15','anytime'),
-        B('career','11:15','12:00','One job rep',
+        trumpetB('11:15','11:45','Short and easy. Chops respond to frequency far more than to long sessions.',
+          [{id:'trumpet.0',label:'Warm-up, flexibility, then something you actually enjoy playing'}]),
+        B('career','11:45','12:15','One job rep',
           'Keeps the pipeline warm without eating the weekend.',
           [{id:'m-rep',label:'1 application or 1 problem — then close the laptop',min:true,short:'Job rep',hint:'before noon'}]),
-        B('free','12:00','23:00','Free day','This is the point of the whole system.',
+        B('free','12:15','23:00','Free day','This is the point of the whole system.',
           [{id:'free.0',label:'Move 30+ min somewhere in here — hoop, bike, long walk'},
            {id:'free.1',label:'Friends, girlfriend, fun'}]),
         shutdownB('23:00','23:30','In bed by 12:30 — weekend rules')
@@ -608,7 +675,9 @@
         [{id:'m-rep',label:'1 application or 1 problem',min:true,short:'Job rep',hint:'before review'}]),
       reviewB('13:30','15:00'),
       walkB('15:00','15:30','anytime'),
-      freeB('15:30','17:45','Rest day — the muscle gets built today.'),
+      trumpetB('15:30','15:55','Light day — warm-up and long tones only. Rest is when chops actually rebuild.',
+        [{id:'trumpet.0',label:'Easy playing only. No range work today.'}]),
+      freeB('15:55','17:45','Rest day — the muscle gets built today.'),
       dinnerB('17:45','19:00'),
       B('evening','19:00','21:30','Evening — easy','School week starts tomorrow.',
         [{id:'evening.0',label:'Wind down early tonight'}]),
@@ -619,7 +688,7 @@
 
   var dayBlocks=function(d){
     return (d.getTime()>=SEMESTER_START.getTime())
-      ? semesterBlocks(d.getDay())
+      ? semesterBlocks(d.getDay(),dkey(d))
       : summerBlocks(d.getDay());
   };
 
@@ -655,6 +724,27 @@
 
   /* ---------- agenda (repo items from Claude + local items from his phone) ---------- */
   var agendaRepo=null;
+  var WOR={
+    A:[['squat','Goblet squat','3×8'],['bench','Bench press or push-ups','3×8'],
+       ['row','One-arm DB row','3×10/side'],['plank','Plank','3×30s']],
+    B:[['rdl','Romanian deadlift','3×8'],['ohp','DB overhead press','3×8'],
+       ['pull','Lat pulldown or assisted pull-up','3×10'],['carry','Farmer carry','3× down-back']]
+  };
+  var wLog=function(){ var a=readJSON('rn1:wo',[]); return Array.isArray(a)?a:[]; };
+  var wSave=function(a){ store.set('rn1:wo',JSON.stringify(a)); };
+  var wLast=function(t){ var l=wLog().filter(function(x){return x.t===t}); return l.length?l[l.length-1]:null; };
+  var wNext=function(){ var l=wLog(); if(!l.length) return 'A'; return l[l.length-1].t==='A'?'B':'A'; };
+  var wOpen=false, wType='A';
+
+  var grades=null;
+  var loadGrades=function(){
+    if(typeof fetch!=='function') return;
+    fetch('grades.json',{cache:'no-store'})
+      .then(function(r){ return r.ok?r.json():null; })
+      .then(function(j){ if(j&&Array.isArray(j.courses)){ grades=j; render(); } })
+      .catch(function(){});
+  };
+
   var money=null;
   var loadMoney=function(){
     if(typeof fetch!=='function') return;
@@ -849,10 +939,27 @@
       +'</div></section>';
   };
 
+  var gradesHTML=function(now){
+    if(!grades||!grades.courses.length) return '';
+    var up=grades.updated?new Date(grades.updated):null;
+    var hrs=(up&&!isNaN(up))?Math.floor((now-up)/3600000):null;
+    var age=hrs===null?'':(hrs<1?'just now':(hrs<24?(hrs+'h ago'):(Math.floor(hrs/24)+'d ago')));
+    return '<div class="gr">'+grades.courses.map(function(c){
+      var sc=(c.score==null)?null:Number(c.score);
+      var cls=(sc==null)?'none':(sc>=90?'':(sc>=80?'mid':'low'));
+      return '<div class="gr-i '+cls+'"><div class="gr-c">'+esc(c.code)+'</div>'
+        +(sc==null?'<div class="gr-s dim">no grades</div>'
+          :('<div class="gr-s">'+sc+(c.letter?('<span class="gr-c" style="margin-left:4px">'
+            +esc(c.letter)+'</span>'):'')+'</div>'))
+        +'</div>';
+    }).join('')+'</div>'
+    +(age?'<p class="gr-when">Grades synced '+age+' &middot; say /canvas to refresh</p>':'');
+  };
+
   var agendaHTML=function(now){
     var done=agDone();
     var all=allAgenda();
-    var html='';
+    var html=gradesHTML(now);
 
     if(adding){
       var TYPES=[['deadline','Deadline'],['todo','To-do'],['repeat','Repeats'],['note','Note']];
@@ -1017,6 +1124,53 @@
     return html;
   };
 
+  var workoutHTML=function(now){
+    var log=wLog();
+    var wk=monday(now), wkKeys=weekKeys(wk);
+    var thisWeek=log.filter(function(x){return wkKeys.indexOf(x.d)>=0}).length;
+    var html='<div class="wo-l">';
+
+    if(wOpen){
+      var last=wLast(wType);
+      html+='<div class="wo-top"><span class="wo-cnt">Logging workout '+wType+'</span>'
+        +'<span class="seg" style="padding:2px">'
+        +['A','B'].map(function(t){return '<button data-act="wotype" data-t="'+t+'" aria-pressed="'
+          +(wType===t)+'" style="padding:6px 14px">'+t+'</button>'}).join('')
+        +'</span></div><div class="wo-form">'
+        +WOR[wType].map(function(e){
+          var prev=last&&last.s?last.s[e[0]]:'';
+          return '<div class="wo-row"><label for="wo-'+e[0]+'">'+e[1]
+            +'<span class="wo-hint" style="display:block">'+e[2]
+            +(prev?(' &middot; last: '+esc(prev)):'')+'</span></label>'
+            +'<input type="text" id="wo-'+e[0]+'" data-k="'+e[0]+'" placeholder="'
+            +(prev?esc(prev):'95x8,95x8')+'" autocomplete="off"></div>';
+        }).join('')
+        +'<div class="ag-btns"><button data-act="wocancel">Cancel</button>'
+        +'<button class="go" data-act="wosave">Save workout</button></div></div></div>';
+      return html;
+    }
+
+    html+='<div class="wo-top"><span class="wo-cnt">'
+      +(log.length?(log.length+' logged &middot; '+thisWeek+' this week'):'No workouts logged yet')
+      +'</span><span class="wo-next">Next: '+wNext()+'</span></div>';
+
+    var lastAny=log.length?log[log.length-1]:null;
+    if(lastAny){
+      var p=lastAny.d.split('-');
+      html+='<p class="wo-hint">Last session — workout '+lastAny.t+', '
+        +DAYNAME[new Date(+p[0],+p[1]-1,+p[2]).getDay()]+' '+(+p[1])+'/'+(+p[2])+'</p>';
+      WOR[lastAny.t].forEach(function(e){
+        var v=lastAny.s&&lastAny.s[e[0]];
+        if(v) html+='<div class="wo-last"><span class="wo-ex">'+e[1]+'</span>'
+          +'<span class="wo-val">'+esc(v)+'</span></div>';
+      });
+    }else{
+      html+='<p class="wo-none">Log your first one and the app will show you what to beat next time.</p>';
+    }
+    html+='<button class="wo-btn" data-act="woopen">Log a workout</button></div>';
+    return html;
+  };
+
   var moneyHTML=function(){
     if(!money) return '<div class="mny"><p class="mny-none">No spending data yet. '
       +'Export your Discover transactions to <b>C:\\Life\\money\\</b> and say <b>/money</b>.</p></div>';
@@ -1058,6 +1212,7 @@
         +'<p class="phase">'+g.phase+'</p>'
         +'<div class="tasks">'+rows+'</div>'
         +(g.id==='money'?moneyHTML():'')
+        +(g.id==='body'?workoutHTML(now):'')
         +'</section>';
     });
     html+='<p class="gnote">These are the week\'s moves, not the whole mountain. Want one swapped? Tell Claude.</p>';
@@ -1099,13 +1254,28 @@
     +'<tr><td class="t">Mon/Wed</td><td>8:00 up &middot; <b>leave 9:15</b> &middot; 10:00 class &middot; 12:00 career &middot; study &middot; 4:30 lift &middot; 11:00 out</td></tr>'
     +'<tr><td class="t">Tue</td><td>7:00 up &middot; <b>leave 7:50</b> &middot; 8:30 class &middot; gap = career &middot; 11:30 class &middot; 5:30 class &middot; 7:00 ensemble &middot; 11:00 out. <b>The gauntlet — floor mode is honorable here.</b></td></tr>'
     +'<tr><td class="t">Thu</td><td>Same start as Tue &middot; 5:30 class &middot; evening free &middot; 11:30 out</td></tr>'
-    +'<tr><td class="t">Fri</td><td>8:00 up &middot; career + build &middot; 4:30 lift &middot; <b>date night</b> &middot; 12:30 out</td></tr>'
+    +'<tr><td class="t">Fri</td><td>8:00 up &middot; career + build &middot; <b>1:45 lift</b> &middot; 3:00 trumpet &middot; <b>4:40 drive Lydia</b> (Hadestown 5&ndash;6:30) &middot; date night &middot; 12:30 out</td></tr>'
     +'<tr><td class="t">Sat</td><td>9:00 up &middot; one rep &middot; move + fun &middot; 12:30 out</td></tr>'
     +'<tr><td class="t">Sun</td><td>9:00 up &middot; one rep &middot; 1:30 review &middot; rest &middot; 11:00 out</td></tr>'
     +'</table></div>'
     +'<p><b>The commute is ~35 minutes door to seat</b> — short drive, then 15&ndash;20 minutes walking in from the lot. '
     +'Two consequences baked into the schedule: that walk <b>is</b> your daily 10 minutes outside on class days, '
     +'and on Monday and Wednesday nights you shower before bed, which buys back 20 minutes at 7am.</p></section>'
+
+    +'<section class="pcard"><h3>The daily 35 <span style="font:500 12px var(--mono);color:var(--muted)">trumpet</span></h3>'
+    +'<div class="tablewrap"><table class="sched">'
+    +'<tr><td class="t">3 min</td><td>Mouthpiece buzz</td><td class="n">steady middle pitch, 15&ndash;20s each</td></tr>'
+    +'<tr><td class="t">6 min</td><td>Long tones</td><td class="n">soft, full breath, centered</td></tr>'
+    +'<tr><td class="t">8 min</td><td>Lip slurs</td><td class="n">Irons or Colin &middot; slow, tongue does the work</td></tr>'
+    +'<tr><td class="t">5 min</td><td>Clarke studies</td><td class="n">#1 and #2, soft and light</td></tr>'
+    +'<tr><td class="t">5 min</td><td>Range work</td><td class="n">only when warm &middot; stop when the tone goes</td></tr>'
+    +'<tr><td class="t">8 min</td><td>Music</td><td class="n">ensemble parts or something fun</td></tr>'
+    +'<tr><td class="t">2 min</td><td>Cool down</td><td class="n">descending, very soft</td></tr>'
+    +'</table></div>'
+    +'<p><b>Rest as much as you play</b> &mdash; horn off the face, equal time. That is not a break from practice, it is the practice.</p>'
+    +'<p><b>Three tries, then put it down.</b> Playing tired is how pressure habits form, and pressure habits cap your range for years.</p>'
+    +'<p><b>Range is air speed and tongue arch</b> (&ldquo;ah&rdquo; &rarr; &ldquo;ee&rdquo;), not lip strength. Real gains take 3&ndash;6 months; screamer range is a multi-year build on top of an effortless middle register.</p>'
+    +'<p>Tuesday is ensemble &mdash; that is the day&rsquo;s playing, don&rsquo;t add to it. Full notes in C:\\Life\\trumpet\\ROUTINE.md, or say <b>/trumpet</b> for a lesson.</p></section>'
 
     +'<section class="pcard"><h3>How the three pieces fit</h3>'
     +'<p><b>This app</b> is the surface — what to do now, what\'s coming, what needs you. '
@@ -1186,6 +1356,25 @@
       s2.mode=(s2.mode==='min')?'full':'min';
       saveDay(dk,s2);
       render();
+    }else if(act==='woopen'){
+      wOpen=true; wType=wNext(); render();
+    }else if(act==='wocancel'){
+      wOpen=false; render();
+    }else if(act==='wotype'){
+      wType=el.getAttribute('data-t'); render();
+    }else if(act==='wosave'){
+      var sets={}, any=false;
+      WOR[wType].forEach(function(e){
+        var inp=document.getElementById('wo-'+e[0]);
+        var v=inp?inp.value.trim():'';
+        if(v){ sets[e[0]]=v; any=true; }
+      });
+      if(any){
+        var lg=wLog();
+        lg.push({d:dkey(now),t:wType,s:sets});
+        wSave(lg);
+      }
+      wOpen=false; render();
     }else if(act==='agopen'){
       adding=true; render('#agtext');
     }else if(act==='agcancel'){
@@ -1228,14 +1417,15 @@
     }
   });
 
-  setInterval(function(){ if(!adding) render(); },30000);
+  setInterval(function(){ if(!adding && !wOpen) render(); },30000);
   document.addEventListener('visibilitychange',function(){
-    if(!document.hidden && !adding){ render(); loadInbox(); loadAgenda(); loadMoney(); }
+    if(!document.hidden && !adding && !wOpen){ render(); loadInbox(); loadAgenda(); loadMoney(); loadGrades(); }
   });
   render();
   loadInbox();
   loadAgenda();
   loadMoney();
+  loadGrades();
 })();
 </script>
 </body>

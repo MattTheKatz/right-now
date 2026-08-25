@@ -1,35 +1,209 @@
 {
-  "updated": "2026-08-23T19:55:00-05:00",
+  "updated": "2026-08-24T19:45:00-05:00",
   "items": [
-    { "id": "audition", "type": "deadline", "tag": "MUSI", "text": "Wind Ensemble chair audition — video submission", "date": "2026-08-28", "time": "12:00 noon" },
-    { "id": "addswap", "type": "deadline", "text": "Last day to add or swap classes", "date": "2026-08-31" },
-    { "id": "dropw", "type": "deadline", "text": "Last day to drop a class without a \"W\"", "date": "2026-09-09" },
-    { "id": "census", "type": "deadline", "text": "Census Day — schedule is locked after this", "date": "2026-09-10" },
-
-    { "id": "fair-all", "type": "deadline", "tag": "Career", "text": "All-Majors Job & Internship Fair, 10am–3:30pm (also Sep 10)", "date": "2026-09-09" },
-    { "id": "cv-4390-q1", "type": "deadline", "tag": "CS 4390", "text": "Quiz 1 — Transport Layer (Ch. 3)", "date": "2026-09-17" },
-    { "id": "fair-ecs", "type": "deadline", "tag": "Career", "text": "ECS Career Fair, 10am–4pm — your fair. Also Sep 23. Resume ready by Sep 15.", "date": "2026-09-22" },
-    { "id": "cv-4390-mid", "type": "deadline", "tag": "CS 4390", "text": "Midterm exam — bring your photo ID", "date": "2026-10-08" },
-    { "id": "cv-4390-q2", "type": "deadline", "tag": "CS 4390", "text": "Quiz 2 — Link Layer (Ch. 6)", "date": "2026-10-27" },
-    { "id": "cv-4390-q3", "type": "deadline", "tag": "CS 4390", "text": "Quiz 3 — Wireless and Mobile (Ch. 7)", "date": "2026-11-10" },
-    { "id": "cv-4390-q4", "type": "deadline", "tag": "CS 4390", "text": "Quiz 4 — Network Security (Ch. 8)", "date": "2026-12-01" },
-    { "id": "cv-4390-proj", "type": "deadline", "tag": "CS 4390", "text": "Course project due", "date": "2026-12-03" },
-
-    { "id": "windform", "type": "todo", "text": "Fill out the Wind Ensemble member information form" },
-    { "id": "advisor", "type": "todo", "text": "See Jacky Trinh in early October to clear the ECS hold — it blocks spring registration, and spring registration is when you apply to graduate" },
-    { "id": "gradapp", "type": "todo", "text": "Apply for graduation in Galaxy — it opens the same day spring registration does (late Oct / early Nov). Miss it and there's a late fee." },
-    { "id": "resume", "type": "todo", "text": "Rebuild the resume to one page — needs to be done by Sep 15, before the career fairs" },
-    { "id": "rent", "type": "todo", "text": "Confirm the rent due date and set up autopay" },
-    { "id": "money", "type": "todo", "text": "30-minute money map with Claude — income, rent, utilities, card balance, what's actually left" },
-    { "id": "moneycsv", "type": "todo", "text": "Discover → Statements → Download Transactions → save the CSV to C:\\Life\\money\\, then say /money" },
-
-    { "id": "cv-4390-grade", "type": "note", "tag": "CS 4390", "text": "Grading: attendance 5% · quizzes 20% · project 20% · midterm 25% · final 30%. Showing up is literally worth a third of a letter grade." },
-    { "id": "cv-4390-oh", "type": "note", "tag": "CS 4390", "text": "Prof. Imtiaz Karim holds office hours TuTh 10–11:30am — that's inside your campus gap, same building trip. Free help you're already parked for." },
-    { "id": "cv-4390-final", "type": "note", "tag": "CS 4390", "text": "Final exam is December, exact date still TBD on the syllabus" },
-    { "id": "canvasrest", "type": "note", "text": "Only CS 4390 is published on Canvas so far — the other four open up as instructors publish them. Say /canvas to re-check." },
-    { "id": "advising", "type": "note", "text": "Quick Advising runs Aug 24–28, 10am–2pm at ECS South 2.502 — first come, 10 minutes, no appointment" },
-    { "id": "fairwindow", "type": "note", "tag": "Career", "text": "Best career-fair window: Wed Sep 23 after your 11:15 class — the floor is open till 4 and you're already on campus. Tue Sep 22 works too in the 9:45–11:30 gap." },
-    { "id": "fallchain", "type": "note", "text": "The October–November chain: see your advisor → hold cleared → spring registration opens → register AND apply for graduation the same week. Break any link and May 2027 gets complicated." },
-    { "id": "windfirst", "type": "note", "tag": "MUSI", "text": "Ensemble first class Tue 8/25, 7pm, PHY 1.304 — logistics only, no rehearsal, don't bring your own horn" }
+    {
+      "id": "audition",
+      "type": "deadline",
+      "tag": "MUSI",
+      "text": "Wind Ensemble chair audition — video submission",
+      "date": "2026-08-28",
+      "time": "12:00 noon"
+    },
+    {
+      "id": "addswap",
+      "type": "deadline",
+      "text": "Last day to add or swap classes",
+      "date": "2026-08-31"
+    },
+    {
+      "id": "dropw",
+      "type": "deadline",
+      "text": "Last day to drop a class without a \"W\"",
+      "date": "2026-09-09"
+    },
+    {
+      "id": "census",
+      "type": "deadline",
+      "text": "Census Day — schedule is locked after this",
+      "date": "2026-09-10"
+    },
+    {
+      "id": "fair-all",
+      "type": "deadline",
+      "tag": "Career",
+      "text": "All-Majors Job & Internship Fair, 10am–3:30pm (also Sep 10)",
+      "date": "2026-09-09"
+    },
+    {
+      "id": "cv-4390-q1",
+      "type": "deadline",
+      "tag": "CS 4390",
+      "text": "Quiz 1 — Transport Layer (Ch. 3)",
+      "date": "2026-09-17"
+    },
+    {
+      "id": "fair-ecs",
+      "type": "deadline",
+      "tag": "Career",
+      "text": "ECS Career Fair, 10am–4pm — your fair. Also Sep 23. Resume ready by Sep 15.",
+      "date": "2026-09-22"
+    },
+    {
+      "id": "cv-4390-mid",
+      "type": "deadline",
+      "tag": "CS 4390",
+      "text": "Midterm exam — bring your photo ID",
+      "date": "2026-10-08"
+    },
+    {
+      "id": "hades-big1",
+      "type": "deadline",
+      "tag": "Lydia",
+      "text": "Hadestown Rehearsal 8 — all day, not the usual 5–6:30",
+      "date": "2026-10-10"
+    },
+    {
+      "id": "cv-4390-q2",
+      "type": "deadline",
+      "tag": "CS 4390",
+      "text": "Quiz 2 — Link Layer (Ch. 6)",
+      "date": "2026-10-27"
+    },
+    {
+      "id": "hades-big2",
+      "type": "deadline",
+      "tag": "Lydia",
+      "text": "Hadestown Rehearsal 12 — all day",
+      "date": "2026-11-06"
+    },
+    {
+      "id": "hades-photo",
+      "type": "deadline",
+      "tag": "Lydia",
+      "text": "Cast photos — all day",
+      "date": "2026-11-07"
+    },
+    {
+      "id": "cv-4390-q3",
+      "type": "deadline",
+      "tag": "CS 4390",
+      "text": "Quiz 3 — Wireless and Mobile (Ch. 7)",
+      "date": "2026-11-10"
+    },
+    {
+      "id": "cv-4390-q4",
+      "type": "deadline",
+      "tag": "CS 4390",
+      "text": "Quiz 4 — Network Security (Ch. 8)",
+      "date": "2026-12-01"
+    },
+    {
+      "id": "cv-4390-proj",
+      "type": "deadline",
+      "tag": "CS 4390",
+      "text": "Course project due",
+      "date": "2026-12-03"
+    },
+    {
+      "id": "windform",
+      "type": "todo",
+      "text": "Fill out the Wind Ensemble member information form"
+    },
+    {
+      "id": "advisor",
+      "type": "todo",
+      "text": "See Jacky Trinh in early October to clear the ECS hold — it blocks spring registration, and spring registration is when you apply to graduate"
+    },
+    {
+      "id": "gradapp",
+      "type": "todo",
+      "text": "Apply for graduation in Galaxy — it opens the same day spring registration does (late Oct / early Nov). Miss it and there's a late fee."
+    },
+    {
+      "id": "irons",
+      "type": "todo",
+      "text": "Order Earl Irons \"27 Groups of Exercises\" — the flexibility book your routine is missing"
+    },
+    {
+      "id": "applied",
+      "type": "todo",
+      "text": "Ask VandenBush about applied trumpet lessons for credit — a real teacher beats any routine I can write"
+    },
+    {
+      "id": "resume",
+      "type": "todo",
+      "text": "Rebuild the resume to one page — needs to be done by Sep 15, before the career fairs"
+    },
+    {
+      "id": "rent",
+      "type": "todo",
+      "text": "Confirm the rent due date and set up autopay"
+    },
+    {
+      "id": "money",
+      "type": "todo",
+      "text": "30-minute money map with Claude — income, rent, utilities, card balance, what's actually left"
+    },
+    {
+      "id": "moneycsv",
+      "type": "todo",
+      "text": "Discover → Statements → Download Transactions → save the CSV to C:\\Life\\money\\, then say /money"
+    },
+    {
+      "id": "cv-4390-grade",
+      "type": "note",
+      "tag": "CS 4390",
+      "text": "Grading: attendance 5% · quizzes 20% · project 20% · midterm 25% · final 30%. Showing up is literally worth a third of a letter grade."
+    },
+    {
+      "id": "cv-4390-oh",
+      "type": "note",
+      "tag": "CS 4390",
+      "text": "Prof. Imtiaz Karim holds office hours TuTh 10–11:30am — that's inside your campus gap, same building trip. Free help you're already parked for."
+    },
+    {
+      "id": "cv-4390-final",
+      "type": "note",
+      "tag": "CS 4390",
+      "text": "Final exam is December, exact date still TBD on the syllabus"
+    },
+    {
+      "id": "canvasrest",
+      "type": "note",
+      "text": "Only CS 4390 is published on Canvas so far — the other four open up as instructors publish them. Say /canvas to re-check."
+    },
+    {
+      "id": "advising",
+      "type": "note",
+      "text": "Quick Advising runs Aug 24–28, 10am–2pm at ECS South 2.502 — first come, 10 minutes, no appointment"
+    },
+    {
+      "id": "fairwindow",
+      "type": "note",
+      "tag": "Career",
+      "text": "Best career-fair window: Wed Sep 23 after your 11:15 class — the floor is open till 4 and you're already on campus. Tue Sep 22 works too in the 9:45–11:30 gap."
+    },
+    {
+      "id": "fallchain",
+      "type": "note",
+      "text": "The October–November chain: see your advisor → hold cleared → spring registration opens → register AND apply for graduation the same week. Break any link and May 2027 gets complicated."
+    },
+    {
+      "id": "windfirst",
+      "type": "note",
+      "tag": "MUSI",
+      "text": "Ensemble first class Tue 8/25, 7pm, PHY 1.304 — logistics only, no rehearsal, don't bring your own horn"
+    },
+    {
+      "id": "hades-note",
+      "type": "note",
+      "tag": "Lydia",
+      "text": "Hadestown rehearsals are Fridays 5:00–6:30 and you are the ride both ways. Friday lift moved to 1:45 so it still fits. The 90 minutes she is in rehearsal are yours — bring the horn or the laptop."
+    },
+    {
+      "id": "trumpet-note",
+      "type": "note",
+      "text": "Daily trumpet routine is in the Plan tab. Rest as much as you play; stop when tired. Tuesday ensemble counts as the day’s practice."
+    }
   ]
 }
