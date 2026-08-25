@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25T00:10:00-05:00",
+  "updated": "2026-08-25T10:25:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -245,6 +245,90 @@
       "id": "canvasrest",
       "type": "note",
       "text": "All 5 courses are live on Canvas now, but only CS 4390 has real content. No assignments posted anywhere yet — normal for week 1. Say /canvas anytime to re-check."
+    },
+    {
+      "id": "hair-1",
+      "type": "deadline",
+      "tag": "Haircut",
+      "text": "Mid taper fade + textured crop — Sides mid taper from a 1, 2–3 in on top, point-cut, styled forward. Full script in haircuts.md; have Lydia rate it after.",
+      "date": "2026-08-29",
+      "title": "Haircut: Mid taper fade",
+      "start": "11:00",
+      "end": "12:00"
+    },
+    {
+      "id": "hair-2",
+      "type": "deadline",
+      "tag": "Haircut",
+      "text": "Low taper + scissor-cut side part — Sharpest one — timed for the career fair on the 22nd. Full script in haircuts.md; have Lydia rate it after.",
+      "date": "2026-09-19",
+      "title": "Haircut: Low taper",
+      "start": "11:00",
+      "end": "12:00"
+    },
+    {
+      "id": "hair-3",
+      "type": "deadline",
+      "tag": "Haircut",
+      "text": "Burst fade + textured fringe — The bold one. Full script in haircuts.md; have Lydia rate it after.",
+      "date": "2026-10-17",
+      "title": "Haircut: Burst fade",
+      "start": "11:00",
+      "end": "12:00"
+    },
+    {
+      "id": "hair-4",
+      "type": "deadline",
+      "tag": "Haircut",
+      "text": "Middle part with a low taper — Needs the length grown from October. Full script in haircuts.md; have Lydia rate it after.",
+      "date": "2026-11-14",
+      "title": "Haircut: Middle part with a low taper",
+      "start": "11:00",
+      "end": "12:00"
+    },
+    {
+      "id": "hair-5",
+      "type": "deadline",
+      "tag": "Haircut",
+      "text": "French crop, blunt fringe — Short winter reset. Full script in haircuts.md; have Lydia rate it after.",
+      "date": "2026-12-12",
+      "title": "Haircut: French crop, blunt fringe",
+      "start": "11:00",
+      "end": "12:00"
+    },
+    {
+      "id": "horn-week",
+      "type": "repeat",
+      "text": "Trumpet: oil the valves, empty the water keys, wipe the horn down",
+      "days": [
+        0
+      ]
+    },
+    {
+      "id": "horn-deep-1",
+      "type": "deadline",
+      "tag": "Trumpet",
+      "text": "Monthly horn bath — full soak, snake the leadpipe, clean the mouthpiece, re-grease slides, re-oil valves",
+      "date": "2026-09-06",
+      "title": "Trumpet deep clean",
+      "start": "10:45",
+      "end": "11:45"
+    },
+    {
+      "id": "horn-deep-2",
+      "type": "deadline",
+      "tag": "Trumpet",
+      "text": "Monthly horn bath — same routine as last month",
+      "date": "2026-10-04",
+      "title": "Trumpet deep clean",
+      "start": "10:45",
+      "end": "11:45"
+    },
+    {
+      "id": "horn-note",
+      "type": "note",
+      "tag": "Trumpet",
+      "text": "Oil valves every 2–3 playing days, not weekly, if they start feeling sluggish. Never use hot water on a lacquered horn — lukewarm only."
     }
   ]
 }
