@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-24T22:00:00-05:00",
+  "updated": "2026-08-24T22:20:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -233,12 +233,12 @@
     {
       "id": "stores",
       "type": "todo",
-      "text": "Make accounts: Walmart (9 min, cheapest) and Tom Thumb (7 min, closest with pickup). Then say /groceries."
+      "text": "Make accounts: Walmart (cheapest, best pickup) + Tom Thumb (closest). Then say /groceries."
     },
     {
       "id": "storenote",
       "type": "note",
-      "text": "Measured drive times from Northside: Sprouts 6 min · Tom Thumb 7 · Walmart Supercenter 9 · Kroger (Coit) 11 · ALDI 16. Kroger is NOT the close one."
+      "text": "Measured from 850 Cecil Dr: Tom Thumb 8 min · Sprouts 8 · Target 9 · Whole Foods 9 · Walmart 10 · Kroger 13 · ALDI 16. Kroger is the far one."
     }
   ]
 }
