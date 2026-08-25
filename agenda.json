@@ -1,13 +1,17 @@
 {
-  "updated": "2026-08-24T22:35:00-05:00",
+  "updated": "2026-08-25T00:10:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
       "type": "deadline",
       "tag": "Lydia",
-      "text": "Drop Lydia at Wells Fargo, 3:45–4:15 (drop-off only). Back in time for the 4:45 dinner — eat it, Tuesday runs till 10.",
+      "text": "Drop-off only. Back before the 4:45 dinner — eat it, Tuesday runs till 10.",
       "date": "2026-08-25",
-      "time": "3:45pm"
+      "time": "3:45pm",
+      "title": "Drop Lydia at Wells Fargo",
+      "start": "15:45",
+      "end": "16:15",
+      "todo": "Drop her off — she has a ride home. Back by 4:15."
     },
     {
       "id": "audition",

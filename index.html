@@ -707,10 +707,34 @@
     ];
   };
 
+  /* One-off timed items from the agenda become real blocks, carving out
+     whatever they overlap so nothing ends up shadowed. */
+  var injectEvent=function(blocks,ev){
+    var es=mins(ev.s), ee=mins(ev.e), out=[];
+    blocks.forEach(function(b){
+      var bs=mins(b.s), be=mins(b.e);
+      if(be<=es||bs>=ee){ out.push(b); return; }
+      if(bs<es) out.push({id:b.id,s:b.s,e:ev.s,title:b.title,why:b.why,tasks:b.tasks});
+      if(be>ee) out.push({id:b.id+'~after',s:ev.e,e:b.e,title:b.title,why:b.why,tasks:b.tasks});
+    });
+    out.push(ev);
+    out.sort(function(x,y){ return mins(x.s)-mins(y.s); });
+    return out;
+  };
+
   var dayBlocks=function(d){
-    return (d.getTime()>=SEMESTER_START.getTime())
+    var base=(d.getTime()>=SEMESTER_START.getTime())
       ? semesterBlocks(d.getDay(),dkey(d))
       : summerBlocks(d.getDay());
+    var dk=dkey(d);
+    (agendaRepo||[]).concat(myItems()).forEach(function(it){
+      if(it.date!==dk||!it.start||!it.end) return;
+      base=injectEvent(base, B('ev:'+it.id, it.start, it.end,
+        it.title||String(it.text).slice(0,34),
+        it.text||'',
+        [{id:'ev:'+it.id+'.0', label:it.todo||it.text}]));
+    });
+    return base;
   };
 
   /* ---------- goals ---------- */
