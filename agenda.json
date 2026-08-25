@@ -329,6 +329,12 @@
       "type": "note",
       "tag": "Trumpet",
       "text": "Oil valves every 2–3 playing days, not weekly, if they start feeling sluggish. Never use hot water on a lacquered horn — lukewarm only."
+    },
+    {
+      "id": "nutrition",
+      "type": "note",
+      "tag": "Body",
+      "text": "2,450 kcal · 195g protein a day. Protein is the one that decides whether you lose fat or lose muscle — hit it even on bad days. Full plan and Sunday prep walkthrough in nutrition/PLAN.md."
     }
   ]
 }
