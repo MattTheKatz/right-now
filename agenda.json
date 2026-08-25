@@ -1,6 +1,14 @@
 {
-  "updated": "2026-08-24T20:30:00-05:00",
+  "updated": "2026-08-24T21:15:00-05:00",
   "items": [
+    {
+      "id": "wellsfargo",
+      "type": "deadline",
+      "tag": "Lydia",
+      "text": "Drive Lydia to Wells Fargo, 3:45–4:45 — hard stop, CS 4348 is at 5:30. Pack food.",
+      "date": "2026-08-25",
+      "time": "3:45pm"
+    },
     {
       "id": "audition",
       "type": "deadline",
