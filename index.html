@@ -781,19 +781,19 @@
     {id:'body',tag:'Body',
      vision:'Lean and strong — the guy who obviously lifts.',
      phase:'Now (Aug–Oct): build the habit, learn the lifts, eat protein. Consistency now, abs later.',
-     week:['Lift 3× — Mon / Wed / Fri at 4:30','Stock the new kitchen: eggs, chicken, rice, yogurt, frozen veg','Protein at every meal','One weigh-in: baseline, zero judgment']},
+     week:['Lift 3× — Mon / Wed / Fri','First real meal prep, Sunday 10:45','Buy the skincare 4 (~$45 at Walmart)','One weigh-in — baseline, zero judgment']},
     {id:'career',tag:'Career',
      vision:'Signed SWE offer before May 2027 graduation.',
      phase:'Now: peak new-grad season, and it overlaps week one of classes. Protect the campus gap — that\'s the block that survives a busy week.',
-     week:['Resume rebuilt — one page','6 applications (Simplify new-grad list)','4 LeetCode easies (NeetCode 150)','Find the ECS career fair date on Handshake']},
+     week:['Resume draft done — hard deadline Sep 15','6 applications','4 LeetCode easies','Career fair is Sep 22 — three weeks out']},
     {id:'money',tag:'Money',
      vision:'High savings rate from day one of the job — early retirement and three kids become math problems with known answers.',
      phase:"Now: see clearly. New apartment means new fixed costs — get them on paper before they get away from you.",
-     week:['30-minute money map with Claude (accounts, debts, monthly burn)','Rent + utilities on autopay so they can never be a surprise','Notice every purchase this week — just notice']},
+     week:['30-minute money map with Claude','Discover login → turn on transaction alerts','Confirm the insurance double-charge got reversed']},
     {id:'us',tag:'Us',
      vision:'The kind of partner someone builds a life with.',
      phase:'Now: show up steady.',
-     week:['Friday date night — planned by you','Cook her dinner in the new place','Tell her about this system. One ally beats zero.']}
+     week:['Friday date night — planned by you','Dad plays Sep 3–5 — pick a night, take her country dancing','Cook her dinner in the new place']}
   ];
 
   /* ---------- inbox (written by Claude's /inbox sweep, fetched here) ---------- */
@@ -1308,7 +1308,12 @@
     var wk=dkey(mon);
     var ws=weekState(wk);
     var label=mon.toLocaleDateString(undefined,{month:'short',day:'numeric'});
-    var html='<p class="wkline">Week of '+label+' &middot; refreshed at each Sunday review</p>';
+    var html='<p class="wkline">Week of '+label+' &middot; refreshed at each Sunday review</p>'
+      +'<section class="gcard" style="border-left:3px solid var(--accent)">'
+      +'<div class="eyebrow">This week&rsquo;s one thing</div>'
+      +'<p class="vision">Open this app once a day. That&rsquo;s it.</p>'
+      +'<p class="phase">Not perfectly. Not finishing everything. Just open it, look at the block you&rsquo;re in, and check off what you actually did. '
+      +'The app will never be finished — it changes every week because your life does. Using it while it&rsquo;s imperfect is the whole skill.</p></section>';
     GOALS.forEach(function(g){
       var rows=g.week.map(function(lbl,i){
         return taskRow({id:g.id+'.'+i,label:lbl},ws.checks,'wktask');
