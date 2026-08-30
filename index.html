@@ -473,9 +473,9 @@
      {id:'m-walk',label:'The walk in from the lot — that\'s your 15 minutes outside',min:true,short:'Walk',hint:'the lot walk'}]);};
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
     'Target today: 2,450 calories and 195g protein. Protein is the one that matters.',
-    quick?[{id:'breakfast.0',label:'Overnight oats jar from the fridge — pineapple and berries on top. ~45g protein, no prep.'},
+    quick?[{id:'breakfast.0',label:'Overnight oats jar from the fridge — berries on top. ~45g protein, no prep.'},
            {id:'breakfast.1',label:'Coffee — black or with milk, not a 400-calorie latte.'}]
-         :[{id:'breakfast.0',label:'Overnight oats with pineapple, or 4 eggs + Greek yogurt. ~45g protein either way.'},
+         :[{id:'breakfast.0',label:'Overnight oats with berries, or 4 eggs + Greek yogurt. ~45g protein either way.'},
            {id:'breakfast.1',label:'Coffee with food, not instead of it.'}]);};
   var careerB=function(s,e,why){return B('career',s,e,'Career block',why,
     [{id:'m-rep',label:'One job rep: submit 1 application or solve 1 problem',min:true,short:'Job rep',hint:'anytime'},
@@ -487,7 +487,8 @@
   var lunchB=function(s,e){return B('lunch',s,e,'Lunch',
     'Prepped Sunday. No decision to make.',
     [{id:'lunch.0',label:'Prepped container: chicken + rice + roasted veg. ~55g protein.'},
-     {id:'lunch.1',label:'Eat away from the screen.'}]);};
+     {id:'lunch.1',label:'Add a handful of spinach or arugula. Nitrates — genuinely good for blood flow.'},
+     {id:'lunch.2',label:'Eat away from the screen.'}]);};
   var studyB=function(s,e){return B('study',s,e,'Study block',
     "Grades are a byproduct of starting before it's urgent.",
     [{id:'study.0',label:'90 minutes on assignments — hardest class first'},
@@ -514,7 +515,7 @@
     });
     tasks.push({id:'wo.prog',label:'PROGRESSION: hit the top of the rep range on all 3 sets? Go up one dumbbell next time. Could not hit the bottom? Same weight again.'});
     tasks.push({id:'wo.log',label:'Log it: Goals tab → Body → Log a workout. It prefills what you lifted last time.'});
-    tasks.push({id:'wo.eat',label:'Within an hour: Greek yogurt + pineapple, or a shake. ~35g protein.'});
+    tasks.push({id:'wo.eat',label:'Within an hour: Greek yogurt + berries, or a shake. ~35g protein.'});
     tasks.push({id:'wo.shower',label:'Shower. Benzoyl peroxide wash on back and shoulders — lather, leave 2 min, rinse.'});
     return B('workout',s,e,'Lift day — Workout '+t,
       'Apartment gym, downstairs. Rest 90 sec on the first four, 60 on the last two.', tasks);
@@ -549,7 +550,7 @@
   var dinnerB=function(s,e){return B('dinner',s,e,'Dinner',
     'Cooking is a money skill, a health skill, and honestly a date skill.',
     [{id:'dinner.0',label:'Prepped container: ground beef or turkey + potatoes + green veg. ~60g protein.'},
-     {id:'dinner.1',label:'Short of 195g protein today? Greek yogurt with pineapple, or a shake, closes the gap.'},
+     {id:'dinner.1',label:'Short of 195g protein today? Greek yogurt with berries, or a shake, closes the gap.'},
      {id:'dinner.2',label:'Everything in this plan is gluten-free — rice, potatoes, corn tortillas, certified-GF oats. Lydia can eat all of it.'}]);};
   var freeB=function(s,e,why){return B('free',s,e,'Free',why,
     [{id:'free.0',label:'Whatever you want — zero guilt'}]);};
