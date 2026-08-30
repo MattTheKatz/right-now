@@ -473,9 +473,9 @@
      {id:'m-walk',label:'The walk in from the lot — that\'s your 15 minutes outside',min:true,short:'Walk',hint:'the lot walk'}]);};
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
     'Target today: 2,450 calories and 195g protein. Protein is the one that matters.',
-    quick?[{id:'breakfast.0',label:'Grab an overnight oats jar from the fridge. ~45g protein, no prep.'},
+    quick?[{id:'breakfast.0',label:'Overnight oats jar from the fridge — pineapple and berries on top. ~45g protein, no prep.'},
            {id:'breakfast.1',label:'Coffee — black or with milk, not a 400-calorie latte.'}]
-         :[{id:'breakfast.0',label:'Overnight oats jar, or 4 eggs + Greek yogurt. ~45g protein either way.'},
+         :[{id:'breakfast.0',label:'Overnight oats with pineapple, or 4 eggs + Greek yogurt. ~45g protein either way.'},
            {id:'breakfast.1',label:'Coffee with food, not instead of it.'}]);};
   var careerB=function(s,e,why){return B('career',s,e,'Career block',why,
     [{id:'m-rep',label:'One job rep: submit 1 application or solve 1 problem',min:true,short:'Job rep',hint:'anytime'},
@@ -493,25 +493,31 @@
     [{id:'study.0',label:'90 minutes on assignments — hardest class first'},
      {id:'study.1',label:'Log one line: what did today add?'}]);};
   var LIFTS={
-    A:[['Goblet squat','3×8','Dumbbell at your chest. Sit down between your knees, heels flat.'],
-       ['Bench press or push-ups','3×8','Shoulder blades pinned back. Bar to mid-chest, elbows tucked ~45°.'],
-       ['One-arm dumbbell row','3×10 each','Knee on the bench. Pull to your hip, not your armpit.'],
-       ['Plank','3×30 sec','Squeeze your glutes. Do not let the hips sag.']],
-    B:[['Romanian deadlift','3×8','Push the hips back, bar stays against your legs. Stop when the hamstrings load.'],
-       ['Dumbbell overhead press','3×8','Ribs down. Do not arch your lower back to get it up.'],
-       ['Lat pulldown or assisted pull-up','3×10','Pull to your collarbone, lead with the elbows.'],
-       ['Farmer carry','3× down and back','Go heavy. Tall posture, do not shrug.']]
+    A:[['Goblet squat','3 × 8–10','One dumbbell at your chest. Sit down between your knees, heels flat, chest up.'],
+       ['Dumbbell bench press','3 × 8–10','Shoulder blades pinned back. Lower to your chest, elbows about 45 degrees, not flared.'],
+       ['One-arm dumbbell row','3 × 10–12 each','Knee and hand on the bench. Pull to your hip, not your armpit. Do not twist.'],
+       ['Romanian deadlift','3 × 10–12','Push the hips back, dumbbells sliding down your thighs. Stop when the hamstrings load hard.'],
+       ['Dumbbell overhead press','3 × 8–10','Ribs down, glutes tight. Do not arch your lower back to finish the rep.'],
+       ['Plank','3 × 30–45 sec','Squeeze your glutes. Straight line from head to heels, hips do not sag.']],
+    B:[['Bulgarian split squat','3 × 8–10 each','Back foot on the bench. Most of the weight through the front heel. Brutal, worth it.'],
+       ['Chest-supported dumbbell row','3 × 10–12','Bench at an incline, lie face down. Pull with the elbows, squeeze at the top.'],
+       ['Incline dumbbell press','3 × 8–10','Bench at 30 degrees. Any higher and it becomes a shoulder press.'],
+       ['Dumbbell hip thrust','3 × 12–15','Shoulders on the bench, weight on your hips. Squeeze at the top, ribs down.'],
+       ['Lateral raise','3 × 12–15','Light. Lead with the elbows, stop at shoulder height. This is what builds width.'],
+       ['Farmer carry','3 × down and back','Go heavy. Tall posture, do not shrug.']]
   };
   var liftB=function(s,e){
     var t=(typeof wNext==='function')?wNext():'A';
-    var tasks=[{id:'wo.warm',label:'Warm up — 5 min bike or brisk walk, then one light set of the first lift.'}];
+    var tasks=[{id:'wo.warm',label:'Warm up — 5 min easy cardio, then one light set of the first exercise.'}];
     LIFTS[t].forEach(function(x,i){
       tasks.push({id:'wo.'+t+'.'+i, label:x[0]+' — '+x[1]+'. '+x[2]});
     });
+    tasks.push({id:'wo.prog',label:'PROGRESSION: hit the top of the rep range on all 3 sets? Go up one dumbbell next time. Could not hit the bottom? Same weight again.'});
     tasks.push({id:'wo.log',label:'Log it: Goals tab → Body → Log a workout. It prefills what you lifted last time.'});
-    tasks.push({id:'wo.shower',label:'Shower right after. Benzoyl peroxide wash on back and shoulders — lather, leave 2 min, rinse.'});
+    tasks.push({id:'wo.eat',label:'Within an hour: Greek yogurt + pineapple, or a shake. ~35g protein.'});
+    tasks.push({id:'wo.shower',label:'Shower. Benzoyl peroxide wash on back and shoulders — lather, leave 2 min, rinse.'});
     return B('workout',s,e,'Lift day — Workout '+t,
-      'Ripped is about 150 ordinary workouts away. This is one of them.', tasks);
+      'Apartment gym, downstairs. Rest 90 sec on the first four, 60 on the last two.', tasks);
   };
   /* Lydia's Hadestown rehearsals — she needs a ride both ways. Real dates, not every Friday. */
   var HADESTOWN={
@@ -543,7 +549,8 @@
   var dinnerB=function(s,e){return B('dinner',s,e,'Dinner',
     'Cooking is a money skill, a health skill, and honestly a date skill.',
     [{id:'dinner.0',label:'Prepped container: ground beef or turkey + potatoes + green veg. ~60g protein.'},
-     {id:'dinner.1',label:'Short of 195g protein today? Greek yogurt or a shake closes the gap.'}]);};
+     {id:'dinner.1',label:'Short of 195g protein today? Greek yogurt with pineapple, or a shake, closes the gap.'},
+     {id:'dinner.2',label:'Everything in this plan is gluten-free — rice, potatoes, corn tortillas, certified-GF oats. Lydia can eat all of it.'}]);};
   var freeB=function(s,e,why){return B('free',s,e,'Free',why,
     [{id:'free.0',label:'Whatever you want — zero guilt'}]);};
   var eveningB=function(s,e){return B('evening',s,e,'Evening — yours',
@@ -633,7 +640,10 @@
         careerB('12:00','13:30','You\'re on campus till the 4:30 lift anyway — this is found time, not extra time.'),
         studyB('13:30','15:00'),
         trumpetB('15:00','15:45','Book a practice room while you are already on campus — it never happens once you get home.'),
-        freeB('15:45','16:30','Earned. Stay on campus — the gym is right there.'),
+        B('free','15:45','16:30','Head home',
+          'Gym is downstairs now, so you lift at home. Which also means you are back inside the trash window.',
+          [{id:'free.0',label:'Drive back — about 35 minutes'},
+           {id:'trash-mw',label:'Valet trash: bin outside the door. You are home in the 4–6 window now.'}]),
         liftB('16:30','17:45'),
         dinnerB('17:45','19:00'),
         eveningB('19:00','22:00'),
