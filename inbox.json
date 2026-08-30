@@ -1,24 +1,24 @@
 {
-  "swept": "2026-08-24T22:05:00-05:00",
+  "swept": "2026-08-30T15:50:00-05:00",
   "needsYou": [
     {
-      "who": "Wind Ens",
-      "what": "Chair audition video due Friday noon — record it Wednesday night, Friday's practice block is after the deadline",
-      "due": "Fri 8/28",
+      "who": "Classes",
+      "what": "TOMORROW is the last day to add or swap classes. After Aug 31 your schedule is locked",
+      "due": "Mon 8/31",
       "soon": true
     },
     {
-      "who": "Utilities",
-      "what": "Conservice set up your apartment utilities — your mom forwarded it. Confirm who's actually paying it before the first bill",
-      "due": "this week",
-      "soon": false
+      "who": "Apartment",
+      "what": "Northside double-charged the insurance fee on some accounts. They say fixed by Sep 1 — check your statement to confirm yours reversed",
+      "due": "after Sep 1",
+      "soon": true
     },
     {
-      "who": "Advising",
-      "what": "Add/swap ends Aug 31 · drop-without-W Sep 9 · dept hold needs an advisor meeting before spring registration",
-      "due": "Aug 31",
-      "soon": false
+      "who": "Review",
+      "what": "Weekly review was at 1:30 today. Twenty minutes whenever you sit down — say \"weekly review\"",
+      "due": "today",
+      "soon": true
     }
   ],
-  "worthKnowing": 9
+  "worthKnowing": 11
 }
