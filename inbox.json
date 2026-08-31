@@ -1,24 +1,24 @@
 {
-  "swept": "2026-08-30T15:50:00-05:00",
+  "swept": "2026-08-31T09:20:00-05:00",
   "needsYou": [
     {
       "who": "Classes",
-      "what": "TOMORROW is the last day to add or swap classes. After Aug 31 your schedule is locked",
-      "due": "Mon 8/31",
-      "soon": true
-    },
-    {
-      "who": "Apartment",
-      "what": "Northside double-charged the insurance fee on some accounts. They say fixed by Sep 1 — check your statement to confirm yours reversed",
-      "due": "after Sep 1",
-      "soon": true
-    },
-    {
-      "who": "Review",
-      "what": "Weekly review was at 1:30 today. Twenty minutes whenever you sit down — say \"weekly review\"",
+      "what": "TODAY is the last day to add or swap. After today your five classes are locked for the semester",
       "due": "today",
       "soon": true
+    },
+    {
+      "who": "CS 4391",
+      "what": "Class Discord invite posted — join it, that is where the real homework help happens",
+      "due": "this week",
+      "soon": true
+    },
+    {
+      "who": "Utilities",
+      "what": "Conservice sent billing FAQs — utility charges are starting. Confirm with your parents who is paying it",
+      "due": "this week",
+      "soon": false
     }
   ],
-  "worthKnowing": 11
+  "worthKnowing": 8
 }

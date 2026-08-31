@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25T10:55:00-05:00",
+  "updated": "2026-08-31T09:20:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -357,6 +357,11 @@
       "type": "note",
       "tag": "Skin",
       "text": "If you get painful deep nodules, scarring, or nothing improves by 12 weeks, see a dermatologist — that is prescription territory and worth it. UTD Student Health can refer you."
+    },
+    {
+      "id": "sixdrop",
+      "type": "note",
+      "text": "Texas six-withdrawals rule: you get SIX course withdrawals total across your entire undergrad career in Texas public schools. Key detail — dropping BEFORE the Sep 9 deadline means no W at all, so it does not count against the six. After Sep 9 it does."
     }
   ]
 }
