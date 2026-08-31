@@ -468,9 +468,12 @@
               .concat(SKIN_AM,[{id:'human.1b',label:'The clothes you laid out last night'}])
             :[{id:'m-teeth',label:'Brush teeth',min:true,short:'Teeth',hint:'morning'},SHOWER_TASK]
               .concat(SKIN_AM,[{id:'human.2',label:'Real clothes + make the bed'}]));};
-  var commuteB=function(s,e,why,bagLabel){return B('transit',s,e,'Drive in + walk from the lot',why,
-    [{id:'transit.0',label:bagLabel},
-     {id:'m-walk',label:'The walk in from the lot — that\'s your 15 minutes outside',min:true,short:'Walk',hint:'the lot walk'}]);};
+  var BIN_IN={id:'trash-in',label:'Bring the trash bin back inside. It is right there as you walk out.'};
+  var commuteB=function(s,e,why,bagLabel,extra){
+    var t=[{id:'transit.0',label:bagLabel}];
+    if(extra) t.push(extra);
+    t.push({id:'m-walk',label:'The walk in from the lot — that is your 15 minutes outside',min:true,short:'Walk',hint:'the lot walk'});
+    return B('transit',s,e,'Drive in + walk from the lot',why,t);};
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
     'Target today: 2,450 calories and 195g protein. Protein is the one that matters.',
     quick?[{id:'breakfast.0',label:'Overnight oats jar from the fridge — berries on top. ~45g protein, no prep.'},
@@ -616,7 +619,7 @@
         breakfastB('07:35','07:50',true),
         commuteB('07:50','08:30',
           'Door to seat is about 35 minutes. Leaving at 7:50 is the whole difference between walking in and sprinting in.',
-          'Bag was packed last night — grab and go'),
+          'Bag was packed last night — grab and go', BIN_IN),
         classB('cs4390','08:30','09:45','CS 4390 · Networks','JSOM 1.110','the 8:30 is brutal; go anyway'),
         careerB('09:45','11:30','That 105-minute gap is the best career block of your week — you\'re already on campus. Library or an ECSS lounge.'),
         classB('cs4349','11:30','12:45','CS 4349 · Algorithms','ECSS 2.415','this class IS interview prep'),
@@ -635,7 +638,7 @@
         breakfastB('08:50','09:15',false),
         commuteB('09:15','10:00',
           'Door to seat is about 35 minutes. Out by 9:15 and you arrive calm.',
-          'Bag: laptop, charger, water bottle'),
+          'Bag: laptop, charger, water bottle', dow===1?BIN_IN:null),
         classB('cs4391','10:00','11:15','CS 4391 · Computer Vision','ECSS 2.415','attendance is most of the grade in disguise'),
         lunchB('11:15','12:00'),
         careerB('12:00','13:30','You\'re on campus till the 4:30 lift anyway — this is found time, not extra time.'),
@@ -674,7 +677,7 @@
         B('dinner','18:45','19:45','Dinner',
           'Cooking is a money skill, a health skill, and honestly a date skill.',
           [{id:'dinner.0',label:'Cook it yourself: protein + carb + something green'},
-           {id:'trash-thu',label:'Trash bin out if you got home before 6 — otherwise it waits for Sunday'}]),
+           {id:'dinner.1',label:'No trash out tonight — you get home after 6. Next one is Sunday.'}]),
         B('evening','19:45','22:00','Evening — yours','Thursday night is earned.',
           [{id:'evening.0',label:'Girlfriend, friends, games — fully off the clock'}]),
         shutdownB('22:00','22:30','In bed, lights out by 11:30',null,[SWEEP])

@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-31T09:20:00-05:00",
+  "updated": "2026-08-31T09:40:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -203,23 +203,6 @@
       "text": "Daily trumpet routine is in the Plan tab. Rest as much as you play; stop when tired. Tuesday ensemble counts as the day’s practice."
     },
     {
-      "id": "trash",
-      "type": "repeat",
-      "text": "Valet trash — bin outside the door 4–6pm (pickup Sun–Thu nights; bins must be IN on Fri/Sat)",
-      "days": [
-        0,
-        1,
-        2,
-        3,
-        4
-      ]
-    },
-    {
-      "id": "trashnote",
-      "type": "note",
-      "text": "Heads up: the 4–6pm valet window collides with your campus days. Mon/Wed you are not home until ~6:15, Tue not until 10, Thu ~7. Sunday is your one reliable trash night — the app puts it there."
-    },
-    {
       "id": "discover",
       "type": "todo",
       "text": "Log into Discover, then turn on transaction alerts (email, $0 threshold) — that is what makes daily spending tracking work"
@@ -362,6 +345,21 @@
       "id": "sixdrop",
       "type": "note",
       "text": "Texas six-withdrawals rule: you get SIX course withdrawals total across your entire undergrad career in Texas public schools. Key detail — dropping BEFORE the Sep 9 deadline means no W at all, so it does not count against the six. After Sep 9 it does."
+    },
+    {
+      "id": "trash",
+      "type": "repeat",
+      "text": "Trash OUT 4–6pm (Sun, Mon, Wed) · bin back IN next morning as you leave (Mon, Tue, Thu)",
+      "days": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "id": "trashnote",
+      "type": "note",
+      "text": "Your trash cycle: OUT Sunday, Monday, Wednesday afternoons. IN Monday, Tuesday, Thursday mornings on your way out the door. Tuesday and Thursday you get home after 6 so you cannot put it out, and bins are banned Friday and Saturday. Three pickups a week is plenty for one person."
     }
   ]
 }
