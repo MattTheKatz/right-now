@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-31T09:40:00-05:00",
+  "updated": "2026-09-01T15:55:00-05:00",
   "items": [
     {
       "id": "wellsfargo",
@@ -360,6 +360,29 @@
       "id": "trashnote",
       "type": "note",
       "text": "Your trash cycle: OUT Sunday, Monday, Wednesday afternoons. IN Monday, Tuesday, Thursday mornings on your way out the door. Tuesday and Thursday you get home after 6 so you cannot put it out, and bins are banned Friday and Saturday. Three pickups a week is plenty for one person."
+    },
+    {
+      "id": "card-due",
+      "type": "deadline",
+      "tag": "Money",
+      "text": "Discover payment due — pay the FULL statement ($897), not the $16.69 minimum",
+      "date": "2026-09-21",
+      "title": "Pay Discover in full",
+      "start": "19:00",
+      "end": "19:15",
+      "todo": "Pay the full statement balance. The minimum leaves the rest accruing interest at ~20-28%."
+    },
+    {
+      "id": "card-5pct",
+      "type": "todo",
+      "tag": "Money",
+      "text": "Activate the Oct–Dec 5% cashback categories: restaurants, entertainment, UTILITIES. It does not apply automatically, and you now have a utility bill."
+    },
+    {
+      "id": "card-util",
+      "type": "note",
+      "tag": "Money",
+      "text": "Card utilization is 32% ($1,120 of $3,500). Under 30% is where it stops affecting your credit score — which matters for apartments and car loans after graduation. Paying in full each month fixes both this and the interest."
     }
   ]
 }
