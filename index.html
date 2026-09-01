@@ -267,6 +267,35 @@
   .phase{color:var(--muted); font-size:13.5px; margin:0 0 10px}
   .gnote{font-size:13px; color:var(--muted); margin:6px 2px 0}
 
+  /* ---------- guided walkthrough ---------- */
+  .gbtn{display:flex; align-items:center; justify-content:center; gap:9px; width:100%;
+    margin:14px 0 2px; padding:15px; background:var(--accent); color:var(--accent-contrast);
+    border:0; border-radius:12px; font:800 16px var(--sans); cursor:pointer}
+  .gbtn:hover{filter:brightness(1.05)}
+  .gwrap{position:fixed; inset:0; z-index:50; background:var(--bg);
+    display:flex; flex-direction:column; padding:calc(18px + env(safe-area-inset-top)) 18px
+    calc(20px + env(safe-area-inset-bottom))}
+  .gtop{display:flex; align-items:center; justify-content:space-between; gap:12px}
+  .gcount{font:700 11px var(--mono); letter-spacing:.2em; text-transform:uppercase; color:var(--accent-text)}
+  .gclose{background:none; border:1px solid var(--line); border-radius:999px; color:var(--muted);
+    font:600 12px var(--mono); padding:7px 13px; cursor:pointer}
+  .gprog{display:flex; gap:4px; margin:14px 0 0}
+  .gprog span{flex:1; height:4px; border-radius:2px; background:var(--line)}
+  .gprog span.on{background:var(--accent)}
+  .gbody{flex:1; display:flex; flex-direction:column; justify-content:center; gap:18px; padding:8px 0}
+  .gstep{font-size:26px; font-weight:800; line-height:1.25; letter-spacing:-.02em; text-wrap:balance}
+  .gnote{font-size:16px; color:var(--muted); line-height:1.5; max-width:34ch}
+  .gtimer{font:800 62px var(--mono); font-variant-numeric:tabular-nums; letter-spacing:-.03em;
+    color:var(--accent-text)}
+  .gtimer.done{color:var(--good-text)}
+  .gtimerrow{display:flex; align-items:center; gap:12px}
+  .gtbtn{background:var(--card2); border:1px solid var(--line); border-radius:999px;
+    color:var(--ink); font:700 13px var(--sans); padding:11px 20px; cursor:pointer}
+  .gnav{display:flex; gap:10px}
+  .gnav button{flex:1; padding:16px; border-radius:12px; font:800 16px var(--sans); cursor:pointer;
+    border:1px solid var(--line); background:var(--card2); color:var(--muted)}
+  .gnav button.go{flex:2; background:var(--accent); color:var(--accent-contrast); border-color:var(--accent)}
+
   /* ---------- today / tomorrow switch ---------- */
   .tlhead{display:flex; align-items:center; gap:6px; margin:0 2px 10px}
   .tlhead button{font:700 11px var(--mono); letter-spacing:.18em; text-transform:uppercase;
@@ -426,6 +455,18 @@
 
   var MIN_IDS=['m-up','m-teeth','m-walk','m-rep','m-bed'];
 
+  /* The plan assumed a stocked fridge. Until a prep actually happens,
+     the meal blocks have to name food he can really get his hands on. */
+  var PREPPED=false;
+  var hasPrep=function(now){
+    for(var i=0;i<7;i++){
+      var d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i);
+      var st=dayState(dkey(d));
+      if(st.checks && st.checks['slow.3']) return true;
+    }
+    return false;
+  };
+
   var dayState=function(k){
     var s;
     try{ s=JSON.parse(store.get('rn1:d:'+k)); }catch(e){ s=null; }
@@ -476,10 +517,10 @@
     return B('transit',s,e,'Drive in + walk from the lot',why,t);};
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
     'Target today: 2,450 calories and 195g protein. Protein is the one that matters.',
-    quick?[{id:'breakfast.0',label:'Overnight oats jar from the fridge — berries on top. ~45g protein, no prep.'},
-           {id:'breakfast.1',label:'Coffee — black or with milk, not a 400-calorie latte.'}]
-         :[{id:'breakfast.0',label:'Overnight oats with berries, or 4 eggs + Greek yogurt. ~45g protein either way.'},
-           {id:'breakfast.1',label:'Coffee with food, not instead of it.'}]);};
+     [{id:'breakfast.0',label:PREPPED
+        ?'Overnight oats jar from the fridge — berries on top. ~45g protein, no prep.'
+        :'Greek yogurt with berries, or scramble 4 eggs. Five minutes, ~40g protein.'},
+     {id:'breakfast.1',label:'Coffee — black or with milk, not a 400-calorie latte.'}]);};
   var careerB=function(s,e,why){return B('career',s,e,'Career block',why,
     [{id:'m-rep',label:'One job rep: submit 1 application or solve 1 problem',min:true,short:'Job rep',hint:'anytime'},
      {id:'career.1',label:'2 more applications (Simplify new-grad list)'},
@@ -487,11 +528,15 @@
   var walkB=function(s,e,hint){return B('walk',s,e,'Walk',
     "Sun and steps fix more brain chemistry than you'd expect.",
     [{id:'m-walk',label:'10–20 minutes outside — no destination needed',min:true,short:'Walk',hint:hint}]);};
-  var lunchB=function(s,e){return B('lunch',s,e,'Lunch',
-    'Prepped Sunday. No decision to make.',
-    [{id:'lunch.0',label:'Prepped container: chicken + rice + roasted veg. ~55g protein.'},
-     {id:'lunch.1',label:'Add a handful of spinach or arugula. Nitrates — genuinely good for blood flow.'},
-     {id:'lunch.2',label:'Eat away from the screen.'}]);};
+  var lunchB=function(s,e){
+    if(PREPPED) return B('lunch',s,e,'Lunch','Prepped Sunday. No decision to make.',
+      [{id:'lunch.0',label:'Prepped container: chicken + rice + roasted veg. ~55g protein.'},
+       {id:'lunch.1',label:'Add a handful of spinach or arugula. Nitrates — good for blood flow.'},
+       {id:'lunch.2',label:'Eat away from the screen.'}]);
+    return B('lunch',s,e,'Lunch',
+      'No prepped food yet, so this is the no-cook version. Still hits the protein.',
+      [{id:'lunch.0',label:'Rotisserie chicken + a microwave rice pouch + bagged salad. Zero cooking, ~50g protein.'},
+       {id:'lunch.1',label:'No groceries yet? Then eat out, but order grilled not fried, and skip the soda.'}]);};
   var studyB=function(s,e){return B('study',s,e,'Study block',
     "Grades are a byproduct of starting before it's urgent.",
     [{id:'study.0',label:'90 minutes on assignments — hardest class first'},
@@ -520,8 +565,17 @@
     tasks.push({id:'wo.log',label:'Log it: Goals tab → Body → Log a workout. It prefills what you lifted last time.'});
     tasks.push({id:'wo.eat',label:'Within an hour: Greek yogurt + berries, or a shake. ~35g protein.'});
     tasks.push({id:'wo.shower',label:'Shower. Benzoyl peroxide wash on back and shoulders — lather, leave 2 min, rinse.'});
-    return B('workout',s,e,'Lift day — Workout '+t,
+    var b=B('workout',s,e,'Lift day — Workout '+t,
       'Apartment gym, downstairs. Rest 90 sec on the first four, 60 on the last two.', tasks);
+    b.steps=[{t:'Warm up',s:300,n:'Five minutes of easy cardio, then one light set of the first exercise. Do not skip this and then wonder why the first set feels awful.'}]
+      .concat(LIFTS[t].map(function(x){
+        return {t:x[0]+'  —  '+x[1], n:x[2]+'  Rest 90 seconds between sets.'};
+      }))
+      .concat([
+        {t:'Log it',n:'Goals tab, Body, Log a workout. It prefills what you lifted last time so you know what to beat.'},
+        {t:'Eat, then shower',n:'Greek yogurt or a shake within the hour. Benzoyl peroxide wash on your back and shoulders — lather, leave it two minutes, rinse.'}
+      ]);
+    return b;
   };
   /* Lydia's Hadestown rehearsals — she needs a ride both ways. Real dates, not every Friday. */
   var HADESTOWN={
@@ -546,11 +600,27 @@
     {id:'tr.7',label:'Cool down — 2 min. Descending long tones, very soft. Do not skip this.'},
     {id:'tr.8',label:'Rest as much as you play. Horn off the face between every section.'}
   ];
-  var trumpetB=function(s,e,why,tasks){return B('trumpet',s,e,'Trumpet',why,tasks||TR);};
+  var TR_STEPS=[
+    {t:'Mouthpiece buzz',s:180,n:'Just the mouthpiece. A steady pitch in your middle register, 15 to 20 seconds at a time. Nowhere to hide without the horn.'},
+    {t:'Long tones',s:360,n:'Middle register, soft, full breath behind every note. A centered tone is the only thing you are chasing here.'},
+    {t:'Lip slurs',s:480,n:'Slow. Let the tongue arch do the work — "ah" going down, "ee" going up. If the lips are straining, you are doing it with the wrong muscle.'},
+    {t:'Clarke #1 and #2',s:300,n:'Soft, light fingers, even. Speed comes from relaxation, not effort.'},
+    {t:'Range work',s:300,n:'Only now that you are properly warm. Stop the second the tone degrades — a bad note practised is a bad note learned.'},
+    {t:'Music',s:480,n:'Ensemble parts, or just something you enjoy playing. This is the part that makes you keep coming back.'},
+    {t:'Cool down',s:120,n:'Descending long tones, very soft, into the low register. Never skip this — it is what lets you play again tomorrow.'},
+    {t:'Done. Rest as much as you played.',n:'Horn off the face. If your chops feel tired, that was the right amount.'}
+  ];
+  var trumpetB=function(s,e,why,tasks){var b=B('trumpet',s,e,'Trumpet',why,tasks||TR); b.steps=TR_STEPS; return b;};
   var moveB=function(s,e){return B('workout',s,e,'Move day',
     'Easy days are where the hard days pay out.',
     [{id:'workout.0',label:'30+ minutes: long walk, bike, hoop, swim — anything'}]);};
-  var dinnerB=function(s,e){return B('dinner',s,e,'Dinner',
+  var dinnerB=function(s,e){
+    if(!PREPPED) return B('dinner',s,e,'Dinner',
+      'No prepped food yet. Fifteen minutes, one pan, no recipe needed.',
+      [{id:'dinner.0',label:'Brown a pound of ground beef in a pan. Microwave a bag of frozen veg. Microwave rice. Done — ~60g protein, 15 minutes.'},
+       {id:'dinner.1',label:'That is genuinely the whole recipe. It is not supposed to be impressive.'},
+       {id:'dinner.2',label:'Everything in this plan is gluten-free. Lydia can eat all of it.'}]);
+    return B('dinner',s,e,'Dinner',
     'Cooking is a money skill, a health skill, and honestly a date skill.',
     [{id:'dinner.0',label:'Prepped container: ground beef or turkey + potatoes + green veg. ~60g protein.'},
      {id:'dinner.1',label:'Short of 195g protein today? Greek yogurt with berries, or a shake, closes the gap.'},
@@ -776,6 +846,7 @@
   };
 
   var dayBlocks=function(d){
+    PREPPED=hasPrep(d);
     var base=(d.getTime()>=SEMESTER_START.getTime())
       ? semesterBlocks(d.getDay(),dkey(d))
       : summerBlocks(d.getDay());
@@ -910,6 +981,9 @@
   var tab='now';
   var expanded={};
   var tlDay=0;
+  var guide=null, gStep=0, gLeft=0, gRun=false, gTick=null;
+  var gStop=function(){ if(gTick){clearInterval(gTick); gTick=null;} gRun=false; };
+  var gExit=function(){ gStop(); guide=null; gStep=0; };
   var adding=false, addType='deadline', addDays=[], addText='', addDate='';
   var syncForm=function(){
     var t=document.getElementById('agtext'), d=document.getElementById('agdate');
@@ -1099,6 +1173,31 @@
     return html;
   };
 
+  var mmss=function(s){var m=Math.floor(s/60),x=s%60;return m+':'+(x<10?'0':'')+x;};
+  var guideHTML=function(){
+    var steps=guide.steps, i=gStep, st=steps[i], last=i===steps.length-1;
+    var bars=steps.map(function(_,k){return '<span class="'+(k<=i?'on':'')+'"></span>'}).join('');
+    var timer='';
+    if(st.s){
+      var done=gLeft<=0;
+      timer='<div class="gtimerrow"><span class="gtimer'+(done?' done':'')+'">'
+        +(done?'time':mmss(gLeft))+'</span>'
+        +'<button class="gtbtn" data-act="gtimer">'+(gRun?'Pause':(gLeft<st.s&&!done?'Resume':'Start'))+'</button>'
+        +(gLeft!==st.s?'<button class="gtbtn" data-act="greset">Reset</button>':'')+'</div>';
+    }
+    return '<div class="gwrap"><div class="gtop">'
+      +'<span class="gcount">'+guide.title+' &middot; step '+(i+1)+' of '+steps.length+'</span>'
+      +'<button class="gclose" data-act="gexit">Close</button></div>'
+      +'<div class="gprog">'+bars+'</div>'
+      +'<div class="gbody"><div class="gstep">'+esc(st.t)+'</div>'
+      +(st.n?'<div class="gnote">'+esc(st.n)+'</div>':'')
+      +timer+'</div>'
+      +'<div class="gnav">'
+      +(i>0?'<button data-act="gback">Back</button>':'')
+      +'<button class="go" data-act="'+(last?'gdone':'gnext')+'">'+(last?'Done':'Next')+'</button>'
+      +'</div></div>';
+  };
+
   var headerHTML=function(now,st){
     var dk=dkey(now);
     var keys=weekKeys(monday(now));
@@ -1197,6 +1296,10 @@
       html+='<div class="catch"><span class="catch-l">2-min catch-up:</span>'
         +missed.map(function(t){return '<button class="pill" data-act="task" data-id="'+t.id+'">'+t.short+'</button>'}).join('')
         +'</div>';
+    }
+    if(cur&&cur.steps&&cur.steps.length){
+      html+='<button class="gbtn" data-act="gopen" data-block="'+cur.id+'">'
+        +'Walk me through it &middot; '+cur.steps.length+' steps</button>';
     }
     html+='<p class="upnext">Up next &middot; <b>'+nextLabel+'</b></p>';
 
@@ -1440,6 +1543,7 @@
     var now=nowDate();
     var dk=dkey(now);
     var st=dayState(dk);
+    if(guide){ app.innerHTML=guideHTML(); return; }
     var html=headerHTML(now,st);
     if(tab==='now') html+=nowHTML(now,st);
     else if(tab==='agenda') html+=agendaHTML(now);
@@ -1481,6 +1585,38 @@
       var s2=dayState(dk);
       s2.mode=(s2.mode==='min')?'full':'min';
       saveDay(dk,s2);
+      render();
+    }else if(act==='gopen'){
+      var bid=el.getAttribute('data-block');
+      var blocks=dayBlocks(now);
+      var b=null; for(var q=0;q<blocks.length;q++){ if(blocks[q].id===bid) b=blocks[q]; }
+      if(b&&b.steps){ guide=b; gStep=0; gLeft=b.steps[0].s||0; gRun=false; render(); }
+    }else if(act==='gexit'||act==='gdone'){
+      if(act==='gdone'&&guide){
+        var s3=dayState(dk);
+        guide.tasks.forEach(function(t){ s3.checks[t.id]=true; });
+        saveDay(dk,s3);
+      }
+      gExit(); render();
+    }else if(act==='gnext'||act==='gback'){
+      gStop();
+      gStep+=(act==='gnext'?1:-1);
+      if(gStep<0) gStep=0;
+      if(gStep>guide.steps.length-1) gStep=guide.steps.length-1;
+      gLeft=guide.steps[gStep].s||0;
+      render();
+    }else if(act==='greset'){
+      gStop(); gLeft=guide.steps[gStep].s||0; render();
+    }else if(act==='gtimer'){
+      if(gRun){ gStop(); }
+      else {
+        gRun=true;
+        gTick=setInterval(function(){
+          gLeft--;
+          if(gLeft<=0){ gLeft=0; gStop(); }
+          render();
+        },1000);
+      }
       render();
     }else if(act==='tlday'){
       tlDay=+el.getAttribute('data-d'); render();
@@ -1545,9 +1681,9 @@
     }
   });
 
-  setInterval(function(){ if(!adding && !wOpen) render(); },30000);
+  setInterval(function(){ if(!adding && !wOpen && !guide) render(); },30000);
   document.addEventListener('visibilitychange',function(){
-    if(!document.hidden && !adding && !wOpen){ render(); loadInbox(); loadAgenda(); loadMoney(); loadGrades(); }
+    if(!document.hidden && !adding && !wOpen && !guide){ render(); loadInbox(); loadAgenda(); loadMoney(); loadGrades(); }
   });
   render();
   loadInbox();
