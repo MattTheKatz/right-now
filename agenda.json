@@ -1,16 +1,16 @@
 {
-  "updated": "2026-09-01T17:30:00-05:00",
+  "updated": "2026-09-01T18:10:00-05:00",
   "items": [
     {
       "id": "parking",
       "type": "deadline",
       "tag": "Urgent",
-      "text": "Parking pass — they have started towing cars without one displayed. Your parents already paid for the spot, so this is only about collecting the pass.",
+      "text": "Parking sticker — Resident Services, Building 9. They are towing cars in the garage without one. Your parents already paid; you are only collecting it.",
       "date": "2026-09-02",
-      "title": "Parking pass — leasing office",
-      "start": "11:15",
-      "end": "11:40",
-      "todo": "Call the Northside 4 leasing office the moment class ends. Say: my parents already paid for parking, I need my pass. Have ready: license plate, car make/model/color, unit 13-192. If they need you in person, the office is at 850 Cecil Drive — your own complex — so do it when you get home around 4:20."
+      "title": "Parking sticker — Resident Services, Bldg 9",
+      "start": "16:30",
+      "end": "17:00",
+      "todo": "Walk to Building 9 the moment you get home, before the lift. Ask for the 26-27 parking sticker. Bring your ID and know your plate number, make, model, color and unit 13-192. Put the sticker on the car before you leave it in the garage overnight."
     },
     {
       "id": "grocery1",
@@ -410,7 +410,7 @@
       "id": "parking-note",
       "type": "note",
       "tag": "Urgent",
-      "text": "Northside 4 leasing office, 850 Cecil Drive. Their rent emails list (972) 900-5891 — worth confirming against your resident portal. Do not park in the garage without the pass displayed until this is sorted."
+      "text": "Resident Services is Building 9, not the leasing office on Northside Blvd and not your building. Office hours Mon-Fri 9am-7pm, Sat 10am-5pm, closed Sunday. Main number (972) 428-3024. If Building 9 turns you away, the leasing office at 3000 Northside Blvd keeps the same hours."
     }
   ]
 }
