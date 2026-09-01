@@ -1,6 +1,17 @@
 {
-  "updated": "2026-09-01T15:55:00-05:00",
+  "updated": "2026-09-01T16:30:00-05:00",
   "items": [
+    {
+      "id": "grocery1",
+      "type": "deadline",
+      "tag": "Food",
+      "text": "Pick up the grocery order. This unblocks everything else — you cannot follow a food plan without food.",
+      "date": "2026-09-02",
+      "title": "Grocery pickup",
+      "start": "19:00",
+      "end": "19:45",
+      "todo": "Walmart on Coit, about 10 minutes. Pull into a pickup spot and they bring it out."
+    },
     {
       "id": "wellsfargo",
       "type": "deadline",
