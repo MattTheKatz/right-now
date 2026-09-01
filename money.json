@@ -1,8 +1,25 @@
 {
-  "updated": "2026-09-01T15:45:00-05:00",
-  "period": "Since Aug 24",
-  "spent": 223,
+  "updated": "2026-09-01T16:10:00-05:00",
+  "period": "August",
+  "spent": 589,
   "target": null,
-  "categories": [],
-  "note": "Fast food is showing up repeatedly in the last few days. That is the same hole draining both the calorie deficit and the savings rate — and it is exactly what Sunday meal prep is built to close."
+  "categories": [
+    {
+      "name": "Restaurants",
+      "amount": 187
+    },
+    {
+      "name": "Merchandise",
+      "amount": 141
+    },
+    {
+      "name": "Gasoline",
+      "amount": 118
+    },
+    {
+      "name": "Entertainment",
+      "amount": 78
+    }
+  ],
+  "note": "You eat out every 2.5 days — 37 restaurant purchases in 92 days, about $276/month, against $47/month on groceries. One good thing: zero interest charges in 15 months. You pay in full, every time."
 }
