@@ -518,8 +518,8 @@
   var breakfastB=function(s,e,quick){return B('breakfast',s,e,quick?'Quick breakfast':'Breakfast',
     'Target today: 2,450 calories and 195g protein. Protein is the one that matters.',
      [{id:'breakfast.0',label:PREPPED
-        ?'Overnight oats jar from the fridge — berries on top. ~45g protein, no prep.'
-        :'Greek yogurt with berries, or scramble 4 eggs. Five minutes, ~40g protein.'},
+        ?'4 hard-boiled eggs from Sunday + Greek yogurt with berries. ~44g protein, zero cooking.'
+        :'Scramble 4 eggs + Greek yogurt with berries. Five minutes, ~44g protein.'},
      {id:'breakfast.1',label:'Coffee — black or with milk, not a 400-calorie latte.'}]);};
   var careerB=function(s,e,why){return B('career',s,e,'Career block',why,
     [{id:'m-rep',label:'One job rep: submit 1 application or solve 1 problem',min:true,short:'Job rep',hint:'anytime'},
@@ -805,12 +805,24 @@
       wakeB('09:00','09:20','by 9:30am'),
       humanB('09:20','10:00'),
       breakfastB('10:00','10:45',false),
-      B('slow','10:45','12:45','Meal prep',
-        'Two hours here buys you five days of not deciding what to eat. Full walkthrough in the Plan tab.',
+      Object.assign(B('slow','10:45','12:45','Meal prep',
+        'Two hours here buys you five days of not deciding what to eat.',
         [{id:'slow.0',label:'Oven 425°F — chicken 22 min, veg 20 min'},
          {id:'slow.1',label:'Rice on · ground meat browned · potatoes in the air fryer'},
-         {id:'slow.2',label:'5 overnight oats jars'},
+         {id:'slow.2',label:'Hard-boil a dozen eggs — 12 min in boiling water, then straight into cold water'},
          {id:'slow.3',label:'Assemble 5 lunches + 5 dinners, cool before lidding'}]),
+        {steps:[
+          {t:'Oven to 425. Line two sheet pans.',s:60,n:'Do this first so it preheats while everything else gets going.'},
+          {t:'Rice on',s:120,n:'3 cups dry rice, 6 cups water. Boil, cover, 18 minutes, then rest 5 with the lid on.'},
+          {t:'Sheet pan 1 — chicken',s:180,n:'3 lb chicken breast. Oil, salt, pepper, garlic powder, paprika. Spread out, do not crowd the pan.'},
+          {t:'Sheet pan 2 — vegetables',s:180,n:'Broccoli, carrots, zucchini. Oil, salt, pepper. Both pans go in — chicken 22 to 25 min, veg 20.'},
+          {t:'Brown the ground beef',s:600,n:'2 lb in a pan over medium-high. Break it up as it cooks. Salt and garlic powder.'},
+          {t:'Potatoes in the air fryer',s:1200,n:'2 lb halved, oiled, salted. 400 degrees for 18 to 20 minutes, shake it halfway.'},
+          {t:'Hard-boil a dozen eggs',s:720,n:'Cover with water, bring to a boil, 12 minutes. Straight into cold water after — that is what makes them peel cleanly.'},
+          {t:'Check the chicken',n:'165 degrees internal. Use a thermometer, do not guess. This is the one step where guessing ruins the week.'},
+          {t:'Assemble',s:600,n:'5 lunch containers: chicken, rice, veg. 5 dinner containers: beef, potatoes, veg. Cool uncovered about 20 minutes before you put lids on, or they go soggy.'},
+          {t:'Done',n:'Fridge holds 4 days. Freeze Thursday and Friday now, move them down Wednesday night.'}
+        ]}),
       B('career','12:45','13:30','One job rep',
         'One rep before the review keeps the streak honest.',
         [{id:'m-rep',label:'1 application or 1 problem',min:true,short:'Job rep',hint:'before review'}]),
