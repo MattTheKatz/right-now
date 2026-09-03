@@ -1,6 +1,19 @@
 {
-  "updated": "2026-09-03T15:15:00-05:00",
+  "updated": "2026-09-03T15:20:00-05:00",
   "items": [
+    {
+      "id": "decal-check",
+      "type": "todo",
+      "tag": "Urgent",
+      "text": "Go look at your parking decal. It must be TURQUOISE (2026-2027) and stuck on the lower driver's-side corner of the front windshield. If it is orange, that is last year's and it stops being valid Sep 5."
+    },
+    {
+      "id": "decal-exchange",
+      "type": "deadline",
+      "tag": "Urgent",
+      "date": "2026-09-05",
+      "text": "Deadline to exchange an orange 2025-2026 decal for the turquoise 2026-2027 one at the Building 9 office. After this, an expired decal gets towed with no further notice. Only applies if yours is orange."
+    },
     {
       "id": "grocery1",
       "type": "deadline",
@@ -394,6 +407,12 @@
       "type": "note",
       "tag": "Money",
       "text": "Card utilization is 32% ($1,120 of $3,500). Under 30% is where it stops affecting your credit score — which matters for apartments and car loans after graduation. Paying in full each month fixes both this and the interest."
+    },
+    {
+      "id": "parking-rules",
+      "type": "note",
+      "tag": "Urgent",
+      "text": "Northside towing is 24/7 since Sep 1, 2026 - not business hours. Three requirements: parking on the resident account, vehicle registered with the office, turquoise decal displayed lower driver's-side corner of the windshield. Residents may NOT park in visitor spaces at all. Building 9 office, (972) 428-3024."
     }
   ]
 }
