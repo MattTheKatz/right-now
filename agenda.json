@@ -1,17 +1,6 @@
 {
-  "updated": "2026-09-02T14:00:00-05:00",
+  "updated": "2026-09-03T15:15:00-05:00",
   "items": [
-    {
-      "id": "parking",
-      "type": "deadline",
-      "tag": "Urgent",
-      "text": "Parking sticker - Resident Services, Building 9. Towing is enforced Mon-Fri 9am-6pm, and the sticker is required for garages AND open lots. Your parents already paid; you are only collecting it.",
-      "date": "2026-09-02",
-      "title": "Parking sticker — Resident Services, Bldg 9",
-      "start": "16:30",
-      "end": "17:00",
-      "todo": "Park in a DESIGNATED VISITOR SPACE, not the garage and not an open lot - both need the sticker you do not have yet. Visitor spaces allow two hours; you need fifteen minutes. Walk to Building 9, ask for the 26-27 garage sticker. Bring: photo ID, plate number and state, car make/model/color, unit 13-192, glovebox registration and insurance. Photograph the plate first. If they say nothing is on file, open the Entrata portal on your phone at the desk instead of driving home. Put the sticker on the car before 9am tomorrow."
-    },
     {
       "id": "grocery1",
       "type": "deadline",
@@ -405,12 +394,6 @@
       "type": "note",
       "tag": "Money",
       "text": "Card utilization is 32% ($1,120 of $3,500). Under 30% is where it stops affecting your credit score — which matters for apartments and car loans after graduation. Paying in full each month fixes both this and the interest."
-    },
-    {
-      "id": "parking-note",
-      "type": "note",
-      "tag": "Urgent",
-      "text": "Resident Services is Building 9 - not the leasing office on Northside Blvd, not your building. Towing enforced Mon-Fri 9am-6pm only; overnight and weekends are not enforced. Visitor spaces have a two hour limit. Leasing office hours Mon-Fri 9am-7pm, Sat 10am-5pm, closed Sunday; Resident Services desk hours are not published anywhere. Main number (972) 428-3024."
     }
   ]
 }
